@@ -1,7 +1,5 @@
 package niruChess;
 
-import java.util.Arrays;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -40,15 +38,15 @@ public class AlphaBetaChess {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		UserInterface ui = new UserInterface();
 		f.add(ui);
-		f.setSize(500, 500);
+		f.setSize(600, 500);
 		f.setVisible(true);
-		System.out.println(sortMoves(posibleMoves()));
+		// System.out.println(sortMoves(posibleMoves()));
 		Object[] option = { "Computer", "Human" };
 		humanAsWhite = JOptionPane.showOptionDialog(null,
-				"Who should play as white?", "ABC Options",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-				option, option[1]);
+				"Who should play as white?", "", JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE, null, option, option[1]);
 		if (humanAsWhite == 0) {
+			UserInterface.humanAsWhite = false;
 			long startTime = System.currentTimeMillis();
 			makeMove(alphaBeta(globalDepth, 1000000, -1000000, "", 0));
 			long endTime = System.currentTimeMillis();
@@ -57,11 +55,11 @@ public class AlphaBetaChess {
 			flipBoard();
 			f.repaint();
 		}
-		makeMove("7655 ");
-		undoMove("7655 ");
-		for (int i = 0; i < 8; i++) {
-			System.out.println(Arrays.toString(chessBoard[i]));
-		}
+		// // makeMove("7655 ");
+		// // undoMove("7655 ");
+		// for (int i = 0; i < 8; i++) {
+		// System.out.println(Arrays.toString(chessBoard[i]));
+		// }
 	}
 
 	public static String alphaBeta(int depth, int beta, int alpha, String move,

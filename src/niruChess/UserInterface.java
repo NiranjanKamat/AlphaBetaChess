@@ -13,24 +13,46 @@ import javax.swing.JPanel;
 public class UserInterface extends JPanel implements MouseListener,
 		MouseMotionListener {
 	static int mouseX, mouseY, newMouseX, newMouseY;
-	static int squareSize = 32;
+	static int squareSize = 60;
+	static boolean humanAsWhite = true;
+
+	// static boolean isPieceBeingDragged = false;
+	// static String draggedPiece = "";
 
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		this.setBackground(Color.yellow);
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
-		for (int i = 0; i < 64; i += 2) {
-			g.setColor(new Color(255, 200, 100));
-			g.fillRect((i % 8 + (i / 8) % 2) * squareSize,
-					(i / 8) * squareSize, squareSize, squareSize);
-			g.setColor(new Color(150, 50, 30));
-			g.fillRect(((i + 1) % 8 - ((i + 1) / 8) % 2) * squareSize,
-					((i + 1) / 8) * squareSize, squareSize, squareSize);
+		paintSquares(g);
+		Image chessPiecesImage = new ImageIcon("ChessPieces.png").getImage();
+		paintPieces(g, chessPiecesImage);
+	}
+
+	void paintSquares(Graphics g) {
+		Color white = new Color(255, 200, 100);
+		Color black = new Color(150, 50, 30);
+		Color currentColor = black;
+		for (int i = 0; i < 8; i++) {
+			currentColor = swapColor(white, black, currentColor);
+			for (int j = 0; j < 8; j++) {
+				g.setColor(currentColor);
+				g.fillRect(i * squareSize, j * squareSize, squareSize,
+						squareSize);
+				currentColor = swapColor(white, black, currentColor);
+			}
 		}
-		Image chessPiecesImage;
-		chessPiecesImage = new ImageIcon("ChessPieces.png").getImage();
+	}
+
+	private Color swapColor(Color white, Color black, Color currentColor) {
+		if (currentColor == white) {
+			return black;
+		} else {
+			return white;
+		}
+	}
+
+	void paintPieces(Graphics g, Image chessPiecesImage) {
 		for (int i = 0; i < 64; i++) {
 			int j = -1, k = -1;
 			switch (AlphaBetaChess.chessBoard[i / 8][i % 8]) {
@@ -83,6 +105,9 @@ public class UserInterface extends JPanel implements MouseListener,
 					k = 1;
 					break;
 			}
+			if (!humanAsWhite) {
+				k = 1 - k;// switch black white graphics
+			}
 			if (j != -1 && k != -1) {
 				g.drawImage(chessPiecesImage, (i % 8) * squareSize, (i / 8)
 						* squareSize, (i % 8 + 1) * squareSize, (i / 8 + 1)
@@ -90,30 +115,37 @@ public class UserInterface extends JPanel implements MouseListener,
 						(k + 1) * 64, this);
 			}
 		}
-		/*
-		 * g.setColor(Color.BLUE); g.fillRect(x-20, y-20, 40, 40);
-		 * g.setColor(new Color(190,81,215)); g.fillRect(40, 20, 80, 50);
-		 * g.drawString("Jonathan", x, y);
-		 */
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (e.getX() < 8 * squareSize && e.getY() < 8 * squareSize) {
+		if (withinBoard(e)) {
 			// if inside the board
 			mouseX = e.getX();
 			mouseY = e.getY();
-			repaint();
 		}
+		// if (withinBoard(e)) {
+		// RowColumn rowColumn = new RowColumn(e);
+		// int row = rowColumn.getRow();
+		// int column = rowColumn.getColumn();
+		// if (!AlphaBetaChess.chessBoard[row][column].equals("")) {
+		// isPieceBeingDragged = true;
+		// draggedPiece = AlphaBetaChess.chessBoard[row][column];
+		// AlphaBetaChess.chessBoard[row][column] = "";
+		// repaint();
+		// }
+		// }
+
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (e.getX() < 8 * squareSize && e.getY() < 8 * squareSize) {
+		if (withinBoard(e)) {
 			// if inside the board
 			newMouseX = e.getX();
 			newMouseY = e.getY();
@@ -146,8 +178,7 @@ public class UserInterface extends JPanel implements MouseListener,
 									/ squareSize];
 				}
 				String userPosibilities = AlphaBetaChess.posibleMoves();
-				if (userPosibilities.replaceAll(dragMove, "").length() < userPosibilities
-						.length()) {
+				if (userPosibilities.contains(dragMove)) {
 					// if valid move
 					AlphaBetaChess.makeMove(dragMove);
 					AlphaBetaChess.flipBoard();
@@ -159,6 +190,10 @@ public class UserInterface extends JPanel implements MouseListener,
 				}
 			}
 		}
+	}
+
+	boolean withinBoard(MouseEvent e) {
+		return e.getX() < 8 * squareSize && e.getY() < 8 * squareSize;
 	}
 
 	@Override
