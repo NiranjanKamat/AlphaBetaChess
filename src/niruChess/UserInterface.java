@@ -149,9 +149,22 @@ public class UserInterface extends JPanel implements MouseListener,
 			// if inside the board
 			newMouseX = e.getX();
 			newMouseY = e.getY();
+			int oldRow = mouseY / squareSize;
+			int oldColumn = mouseX / squareSize;
+			int newRow = newMouseY / squareSize;
+			int newColumn = newMouseX / squareSize;
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				String dragMove;
-				if (newMouseY / squareSize == 0
+				if (newRow == 7 && newColumn == 6 && oldRow == 7
+						&& oldColumn == 4
+						&& AlphaBetaChess.chessBoard[7][4].equals("A")) {
+					dragMove = "7476Y";
+				} else if (newRow == 7 && newColumn == 2 && oldRow == 7
+						&& oldColumn == 4
+						&& AlphaBetaChess.chessBoard[7][4].equals("A")) {
+					System.out.println("Came left castle");
+					dragMove = "7472X";
+				} else if (newMouseY / squareSize == 0
 						&& mouseY / squareSize == 1
 						&& "P".equals(AlphaBetaChess.chessBoard[mouseY
 								/ squareSize][mouseX / squareSize])) {
