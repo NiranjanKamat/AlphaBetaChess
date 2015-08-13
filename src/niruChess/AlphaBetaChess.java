@@ -1,7 +1,5 @@
 package niruChess;
 
-import java.util.Arrays;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -17,16 +15,7 @@ public class AlphaBetaChess {
 			{ "R", "K", "B", "Q", "A", "B", "K", "R" } };
 	static int kingPositionC, kingPositionL;
 	static int humanAsWhite = -1;// 1=human as white, 0=human as black
-	static int globalDepth = 1;
-
-	static boolean kingCMoved = false;
-	static boolean kingLMoved = false;
-
-	static boolean rightRookCMoved = false;
-	static boolean leftRookCMoved = false;
-
-	static boolean rightRookLMoved = false;
-	static boolean leftRookLMoved = false;
+	static int globalDepth = 4;
 
 	public static void main(String[] args) {
 		while (!"A".equals(chessBoard[kingPositionC / 8][kingPositionC % 8])) {
@@ -66,12 +55,11 @@ public class AlphaBetaChess {
 			flipBoard();
 			f.repaint();
 		}
-	}
-
-	public static void printBoard() {
-		for (int i = 0; i < 8; i++) {
-			System.out.println(Arrays.toString(chessBoard[i]));
-		}
+		// // makeMove("7655 ");
+		// // undoMove("7655 ");
+		// for (int i = 0; i < 8; i++) {
+		// System.out.println(Arrays.toString(chessBoard[i]));
+		// }
 	}
 
 	public static String alphaBeta(int depth, int beta, int alpha, String move,
@@ -141,36 +129,10 @@ public class AlphaBetaChess {
 		int kingTemp = kingPositionC;
 		kingPositionC = 63 - kingPositionL;
 		kingPositionL = 63 - kingTemp;
-
-		swapRookMovedStatuses();
-
-		swapKingMovedStatuses();
-	}
-
-	static void swapKingMovedStatuses() {
-		boolean kingtmp = kingCMoved;
-		kingCMoved = kingLMoved;
-		kingLMoved = kingtmp;
-	}
-
-	static void swapRookMovedStatuses() {
-		boolean rightRookCtemp = rightRookCMoved;
-		rightRookCMoved = leftRookLMoved;
-		leftRookLMoved = rightRookCtemp;
-
-		boolean leftRookCtemp = leftRookCMoved;
-		leftRookCMoved = rightRookLMoved;
-		rightRookLMoved = leftRookCtemp;
 	}
 
 	public static void makeMove(String move) {
-		System.out.println("start ");
-		printBoard();
-		if (move.charAt(4) == 'Y') {// right castle
-			castleKingRight();
-		} else if (move.charAt(4) == 'X') {// left castle
-			castleKingLeft();
-		} else if (move.charAt(4) != 'P') {
+		if (move.charAt(4) != 'P') {
 			chessBoard[Character.getNumericValue(move.charAt(2))][Character
 					.getNumericValue(move.charAt(3))] = chessBoard[Character
 					.getNumericValue(move.charAt(0))][Character
@@ -188,34 +150,10 @@ public class AlphaBetaChess {
 			chessBoard[0][Character.getNumericValue(move.charAt(1))] = String
 					.valueOf(move.charAt(3));
 		}
-		System.out.println("end ");
-		printBoard();
-	}
-
-	static void castleKingLeft() {
-		chessBoard[7][2] = "A";
-		chessBoard[7][3] = "R";
-		chessBoard[7][4] = " ";
-		chessBoard[7][0] = " ";
-		kingPositionC = 58;
-		kingCMoved = true;
-	}
-
-	static void castleKingRight() {
-		chessBoard[7][6] = "A";
-		chessBoard[7][5] = "R";
-		chessBoard[7][4] = " ";
-		chessBoard[7][7] = " ";
-		kingPositionC = 62;
-		kingCMoved = true;
 	}
 
 	public static void undoMove(String move) {
-		if (move.charAt(4) == 'Y') {// right castle
-			uncastleKingRight();
-		} else if (move.charAt(4) == 'X') {// left castle
-			uncastleKingLeft();
-		} else if (move.charAt(4) != 'P') {
+		if (move.charAt(4) != 'P') {
 			chessBoard[Character.getNumericValue(move.charAt(0))][Character
 					.getNumericValue(move.charAt(1))] = chessBoard[Character
 					.getNumericValue(move.charAt(2))][Character
@@ -234,24 +172,6 @@ public class AlphaBetaChess {
 			chessBoard[0][Character.getNumericValue(move.charAt(1))] = String
 					.valueOf(move.charAt(2));
 		}
-	}
-
-	static void uncastleKingLeft() {
-		chessBoard[7][2] = " ";
-		chessBoard[7][3] = " ";
-		chessBoard[7][4] = "A";
-		chessBoard[7][0] = "R";
-		kingPositionC = 60;
-		kingCMoved = false;
-	}
-
-	static void uncastleKingRight() {
-		chessBoard[7][6] = " ";
-		chessBoard[7][5] = " ";
-		chessBoard[7][4] = "A";
-		chessBoard[7][7] = "R";
-		kingPositionC = 60;
-		kingCMoved = false;
 	}
 
 	public static String posibleMoves() {
@@ -575,23 +495,6 @@ public class AlphaBetaChess {
 				}
 			}
 		}
-		if (!kingCMoved && !rightRookCMoved && chessBoard[7][5].equals(" ")
-				&& chessBoard[7][6].equals(" ")) {
-			castleKingRight();
-			if (kingSafe()) {
-				list += "7476Y";// right castle
-			}
-			uncastleKingRight();
-		}
-		if (!kingCMoved && !leftRookCMoved && chessBoard[7][1].equals(" ")
-				&& chessBoard[7][2].equals(" ") && chessBoard[7][3].equals(" ")) {
-			castleKingLeft();
-			if (kingSafe()) {
-				list += "7472X"; // left castle
-			}
-			uncastleKingLeft();
-		}
-
 		// need to add casting later
 		return list;
 	}
