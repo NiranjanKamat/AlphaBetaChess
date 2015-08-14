@@ -1,5 +1,7 @@
 package niruChess;
 
+import java.util.Arrays;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -54,12 +56,19 @@ public class AlphaBetaChess {
 					+ " milliseconds");
 			flipBoard();
 			f.repaint();
+
 		}
 		// // makeMove("7655 ");
 		// // undoMove("7655 ");
 		// for (int i = 0; i < 8; i++) {
 		// System.out.println(Arrays.toString(chessBoard[i]));
 		// }
+	}
+
+	public static void printBoard() {
+		for (int i = 0; i < 8; i++) {
+			System.out.println(Arrays.toString(chessBoard[i]));
+		}
 	}
 
 	public static String alphaBeta(int depth, int beta, int alpha, String move,

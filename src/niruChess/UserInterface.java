@@ -12,12 +12,10 @@ import javax.swing.JPanel;
 
 public class UserInterface extends JPanel implements MouseListener,
 		MouseMotionListener {
-	static int mouseX, mouseY, newMouseX, newMouseY;
+	static int oldColumn, oldRow;
+	static int newColumn, newRow;
 	static int squareSize = 60;
 	static boolean humanAsWhite = true;
-
-	// static boolean isPieceBeingDragged = false;
-	// static String draggedPiece = "";
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -121,8 +119,10 @@ public class UserInterface extends JPanel implements MouseListener,
 	public void mousePressed(MouseEvent e) {
 		if (withinBoard(e)) {
 			// if inside the board
-			mouseX = e.getX();
-			mouseY = e.getY();
+			// mouseX = e.getX();
+			// mouseY = e.getY();
+			oldColumn = e.getX() / squareSize;
+			oldRow = e.getY() / squareSize;
 		}
 		// if (withinBoard(e)) {
 		// RowColumn rowColumn = new RowColumn(e);
@@ -147,35 +147,21 @@ public class UserInterface extends JPanel implements MouseListener,
 	public void mouseReleased(MouseEvent e) {
 		if (withinBoard(e)) {
 			// if inside the board
-			newMouseX = e.getX();
-			newMouseY = e.getY();
+			newColumn = e.getX() / squareSize;
+			newRow = e.getY() / squareSize;
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				String dragMove;
-				if (newMouseY / squareSize == 0
-						&& mouseY / squareSize == 1
-						&& "P".equals(AlphaBetaChess.chessBoard[mouseY
-								/ squareSize][mouseX / squareSize])) {
+				if (newRow == 0
+						&& oldRow == 1
+						&& "P".equals(AlphaBetaChess.chessBoard[oldRow][oldColumn])) {
 					// pawn promotion
-					dragMove = ""
-							+ mouseX
-							/ squareSize
-							+ newMouseX
-							/ squareSize
-							+ AlphaBetaChess.chessBoard[newMouseY / squareSize][newMouseX
-									/ squareSize] + "QP";
+					dragMove = "" + oldColumn + newColumn
+							+ AlphaBetaChess.chessBoard[newRow][newColumn]
+							+ "QP";
 				} else {
 					// regular move
-					dragMove = ""
-							+ mouseY
-							/ squareSize
-							+ mouseX
-							/ squareSize
-							+ newMouseY
-							/ squareSize
-							+ newMouseX
-							/ squareSize
-							+ AlphaBetaChess.chessBoard[newMouseY / squareSize][newMouseX
-									/ squareSize];
+					dragMove = "" + oldRow + oldColumn + newRow + newColumn
+							+ AlphaBetaChess.chessBoard[newRow][newColumn];
 				}
 				String userPosibilities = AlphaBetaChess.posibleMoves();
 				if (userPosibilities.contains(dragMove)) {
@@ -187,6 +173,7 @@ public class UserInterface extends JPanel implements MouseListener,
 							0));
 					AlphaBetaChess.flipBoard();
 					repaint();
+					AlphaBetaChess.printBoard();
 				}
 			}
 		}
