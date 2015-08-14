@@ -50,6 +50,95 @@ public class UserInterface extends JPanel implements MouseListener,
 		}
 	}
 
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if (withinBoard(e)) {
+			// if inside the board
+			// mouseX = e.getX();
+			// mouseY = e.getY();
+			oldColumn = e.getX() / squareSize;
+			oldRow = e.getY() / squareSize;
+		}
+		// if (withinBoard(e)) {
+		// RowColumn rowColumn = new RowColumn(e);
+		// int row = rowColumn.getRow();
+		// int column = rowColumn.getColumn();
+		// if (!AlphaBetaChess.chessBoard[row][column].equals("")) {
+		// isPieceBeingDragged = true;
+		// draggedPiece = AlphaBetaChess.chessBoard[row][column];
+		// AlphaBetaChess.chessBoard[row][column] = "";
+		// repaint();
+		// }
+		// }
+
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		if (withinBoard(e)) {
+			// if inside the board
+			newColumn = e.getX() / squareSize;
+			newRow = e.getY() / squareSize;
+			if (e.getButton() == MouseEvent.BUTTON1) {
+				String dragMove;
+				if (newRow == 0
+						&& oldRow == 1
+						&& "P".equals(AlphaBetaChess.chessBoard[oldRow][oldColumn])) {
+					// pawn promotion
+					dragMove = "" + oldColumn + newColumn
+							+ AlphaBetaChess.chessBoard[newRow][newColumn]
+							+ "QP";
+				} else {
+					// regular move
+					dragMove = "" + oldRow + oldColumn + newRow + newColumn
+							+ AlphaBetaChess.chessBoard[newRow][newColumn];
+				}
+				String userPosibilities = AlphaBetaChess.posibleMoves();
+				System.out.println("dragMove " + dragMove);
+				if (userPosibilities.contains(dragMove)) {
+					// if valid move
+					System.out.println();
+					AlphaBetaChess.makeMove(dragMove);
+					AlphaBetaChess.flipBoard();
+					AlphaBetaChess.makeMove(AlphaBetaChess.alphaBeta(
+							AlphaBetaChess.globalDepth, 1000000, -1000000, "",
+							0));
+					AlphaBetaChess.flipBoard();
+					repaint();
+					AlphaBetaChess.printBoard(AlphaBetaChess.chessBoard);
+				} else {
+					System.out.println(dragMove + " not allowed");
+					System.out.println("userPosibilities " + userPosibilities);
+				}
+			}
+		}
+	}
+
+	boolean withinBoard(MouseEvent e) {
+		return e.getX() < 8 * squareSize && e.getY() < 8 * squareSize;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
 	void paintPieces(Graphics g, Image chessPiecesImage) {
 		for (int i = 0; i < 64; i++) {
 			int j = -1, k = -1;
@@ -115,87 +204,4 @@ public class UserInterface extends JPanel implements MouseListener,
 		}
 	}
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-		if (withinBoard(e)) {
-			// if inside the board
-			// mouseX = e.getX();
-			// mouseY = e.getY();
-			oldColumn = e.getX() / squareSize;
-			oldRow = e.getY() / squareSize;
-		}
-		// if (withinBoard(e)) {
-		// RowColumn rowColumn = new RowColumn(e);
-		// int row = rowColumn.getRow();
-		// int column = rowColumn.getColumn();
-		// if (!AlphaBetaChess.chessBoard[row][column].equals("")) {
-		// isPieceBeingDragged = true;
-		// draggedPiece = AlphaBetaChess.chessBoard[row][column];
-		// AlphaBetaChess.chessBoard[row][column] = "";
-		// repaint();
-		// }
-		// }
-
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		if (withinBoard(e)) {
-			// if inside the board
-			newColumn = e.getX() / squareSize;
-			newRow = e.getY() / squareSize;
-			if (e.getButton() == MouseEvent.BUTTON1) {
-				String dragMove;
-				if (newRow == 0
-						&& oldRow == 1
-						&& "P".equals(AlphaBetaChess.chessBoard[oldRow][oldColumn])) {
-					// pawn promotion
-					dragMove = "" + oldColumn + newColumn
-							+ AlphaBetaChess.chessBoard[newRow][newColumn]
-							+ "QP";
-				} else {
-					// regular move
-					dragMove = "" + oldRow + oldColumn + newRow + newColumn
-							+ AlphaBetaChess.chessBoard[newRow][newColumn];
-				}
-				String userPosibilities = AlphaBetaChess.posibleMoves();
-				if (userPosibilities.contains(dragMove)) {
-					// if valid move
-					AlphaBetaChess.makeMove(dragMove);
-					AlphaBetaChess.flipBoard();
-					AlphaBetaChess.makeMove(AlphaBetaChess.alphaBeta(
-							AlphaBetaChess.globalDepth, 1000000, -1000000, "",
-							0));
-					AlphaBetaChess.flipBoard();
-					repaint();
-					AlphaBetaChess.printBoard();
-				}
-			}
-		}
-	}
-
-	boolean withinBoard(MouseEvent e) {
-		return e.getX() < 8 * squareSize && e.getY() < 8 * squareSize;
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
 }

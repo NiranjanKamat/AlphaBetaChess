@@ -65,10 +65,11 @@ public class AlphaBetaChess {
 		// }
 	}
 
-	public static void printBoard() {
+	public static void printBoard(String[][] chessBoard) {
 		for (int i = 0; i < 8; i++) {
-			System.out.println(Arrays.toString(chessBoard[i]));
+			System.out.println(i + " " + Arrays.toString(chessBoard[i]));
 		}
+		System.out.println("   0, 1, 2, 3, 4, 5, 6, 7");
 	}
 
 	public static String alphaBeta(int depth, int beta, int alpha, String move,
@@ -77,10 +78,10 @@ public class AlphaBetaChess {
 		String list = posibleMoves();
 		if (depth == 0 || list.length() == 0) {
 			return move
-					+ (Rating.rating(list.length(), depth) * (player * 2 - 1));
+					+ (Rating.rating(list.length(), depth) * (1 - player * 2));
 		}
 		list = sortMoves(list);
-		player = 1 - player;// either 1 or 0
+		player = 1 - player;// either 1 or 0: 0 is computer 1 is human
 		for (int i = 0; i < list.length(); i += 5) {
 			makeMove(list.substring(i, i + 5));
 			flipBoard();
@@ -194,7 +195,7 @@ public class AlphaBetaChess {
 					list += posibleR(i);
 					break;
 				case "K":
-					list += posibleK(i);
+					list += posibleK(i, chessBoard);
 					break;
 				case "B":
 					list += posibleB(i);
@@ -356,7 +357,7 @@ public class AlphaBetaChess {
 		return list;
 	}
 
-	public static String posibleK(int i) {
+	public static String posibleK(int i, String chessBoard[][]) {
 		String list = "", oldPiece;
 		int r = i / 8, c = i % 8;
 		for (int j = -1; j <= 1; j += 2) {
@@ -512,7 +513,7 @@ public class AlphaBetaChess {
 		int[] score = new int[list.length() / 5];
 		for (int i = 0; i < list.length(); i += 5) {
 			makeMove(list.substring(i, i + 5));
-			score[i / 5] = -Rating.rating(-1, 0);
+			score[i / 5] = Rating.rating(-1, 0);
 			undoMove(list.substring(i, i + 5));
 		}
 		String newListA = "", newListB = list;

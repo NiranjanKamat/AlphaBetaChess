@@ -1,0 +1,9 @@
+[r, k, b,  , a,  , k, r]
+[p, p,  , p,  , p, p, p]
+[ ,  ,  , p, p,  ,  ,  ]
+[ ,  ,  ,  ,  ,  ,  ,  ]
+[ ,  ,  , P,  ,  ,  ,  ]
+[ ,  ,  ,  , P,  ,  ,  ]
+[P, P, P, q,  , P, P, P]
+[R, K,  ,  , A, B, K, R]
+# Knight on B1 does not attack Black queen on D2
