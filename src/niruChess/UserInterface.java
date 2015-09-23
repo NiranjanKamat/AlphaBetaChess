@@ -53,24 +53,9 @@ public class UserInterface extends JPanel implements MouseListener,
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (withinBoard(e)) {
-			// if inside the board
-			// mouseX = e.getX();
-			// mouseY = e.getY();
 			oldColumn = e.getX() / squareSize;
 			oldRow = e.getY() / squareSize;
 		}
-		// if (withinBoard(e)) {
-		// RowColumn rowColumn = new RowColumn(e);
-		// int row = rowColumn.getRow();
-		// int column = rowColumn.getColumn();
-		// if (!AlphaBetaChess.chessBoard[row][column].equals("")) {
-		// isPieceBeingDragged = true;
-		// draggedPiece = AlphaBetaChess.chessBoard[row][column];
-		// AlphaBetaChess.chessBoard[row][column] = "";
-		// repaint();
-		// }
-		// }
-
 	}
 
 	@Override

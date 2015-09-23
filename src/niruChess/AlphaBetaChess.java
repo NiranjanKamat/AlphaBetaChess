@@ -30,9 +30,6 @@ public class AlphaBetaChess {
 		 * PIECE=WHITE/black pawn=P/p kinght (horse)=K/k bishop=B/b rook
 		 * (castle)=R/r Queen=Q/q King=A/a
 		 * 
-		 * My strategy is to create an alpha-beta tree diagram wich returns the
-		 * best outcome
-		 * 
 		 * (1234b represents row1,column2 moves to row3, column4 which captured
 		 * b (a space represents no capture))
 		 */
@@ -195,7 +192,7 @@ public class AlphaBetaChess {
 					list += posibleR(i);
 					break;
 				case "K":
-					list += posibleK(i, chessBoard);
+					list += possibleKnight(i);
 					break;
 				case "B":
 					list += posibleB(i);
@@ -204,7 +201,7 @@ public class AlphaBetaChess {
 					list += posibleQ(i);
 					break;
 				case "A":
-					list += posibleA(i);
+					list += possibleKing(i);
 					break;
 			}
 		}
@@ -357,7 +354,8 @@ public class AlphaBetaChess {
 		return list;
 	}
 
-	public static String posibleK(int i, String chessBoard[][]) {
+	public static String possibleKnight(int i) {
+		AlphaBetaChess.printBoard(chessBoard);
 		String list = "", oldPiece;
 		int r = i / 8, c = i % 8;
 		for (int j = -1; j <= 1; j += 2) {
@@ -368,9 +366,14 @@ public class AlphaBetaChess {
 							|| " ".equals(chessBoard[r + j][c + k * 2])) {
 						oldPiece = chessBoard[r + j][c + k * 2];
 						chessBoard[r][c] = " ";
+						AlphaBetaChess.printBoard(chessBoard);
 						if (kingSafe()) {
 							list = list + r + c + (r + j) + (c + k * 2)
 									+ oldPiece;
+						} else {
+							System.out.println("not valid " + r + c + (r + j)
+									+ (c + k * 2) + oldPiece);
+							System.out.println("knig not safe 1");
 						}
 						chessBoard[r][c] = "K";
 						chessBoard[r + j][c + k * 2] = oldPiece;
@@ -383,9 +386,14 @@ public class AlphaBetaChess {
 							|| " ".equals(chessBoard[r + j * 2][c + k])) {
 						oldPiece = chessBoard[r + j * 2][c + k];
 						chessBoard[r][c] = " ";
+						AlphaBetaChess.printBoard(chessBoard);
 						if (kingSafe()) {
 							list = list + r + c + (r + j * 2) + (c + k)
 									+ oldPiece;
+						} else {
+							System.out.println("Not valid " + r + c
+									+ (r + j * 2) + (c + k) + oldPiece);
+							System.out.println("knig not safe 2");
 						}
 						chessBoard[r][c] = "K";
 						chessBoard[r + j * 2][c + k] = oldPiece;
@@ -478,7 +486,7 @@ public class AlphaBetaChess {
 		return list;
 	}
 
-	public static String posibleA(int i) {
+	public static String possibleKing(int i) {
 		String list = "", oldPiece;
 		int r = i / 8, c = i % 8;
 		for (int j = 0; j < 9; j++) {

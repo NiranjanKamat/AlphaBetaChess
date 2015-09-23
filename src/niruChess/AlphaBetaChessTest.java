@@ -17,7 +17,7 @@ public class AlphaBetaChessTest {
 		String chessBoard[][] = readState("misc/testData/KnightBugConfig.txt");
 		AlphaBetaChess.printBoard(chessBoard);
 		assertEquals(chessBoard[6][3], "q");
-		System.out.println(AlphaBetaChess.posibleK(57, chessBoard));
+		System.out.println(AlphaBetaChess.possibleKnight(57));
 
 	}
 

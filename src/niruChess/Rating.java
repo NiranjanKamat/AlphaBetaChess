@@ -179,11 +179,11 @@ public class Rating {
 				case "A":
 					if (material >= 1750) {
 						counter += kingMidBoard[i / 8][i % 8];
-						counter += AlphaBetaChess.posibleA(
+						counter += AlphaBetaChess.possibleKing(
 								AlphaBetaChess.kingPositionC).length() * 10;
 					} else {
 						counter += kingEndBoard[i / 8][i % 8];
-						counter += AlphaBetaChess.posibleA(
+						counter += AlphaBetaChess.possibleKing(
 								AlphaBetaChess.kingPositionC).length() * 30;
 					}
 					break;
