@@ -355,7 +355,6 @@ public class AlphaBetaChess {
 	}
 
 	public static String possibleKnight(int i) {
-		AlphaBetaChess.printBoard(chessBoard);
 		String list = "", oldPiece;
 		int r = i / 8, c = i % 8;
 		for (int j = -1; j <= 1; j += 2) {
@@ -366,14 +365,10 @@ public class AlphaBetaChess {
 							|| " ".equals(chessBoard[r + j][c + k * 2])) {
 						oldPiece = chessBoard[r + j][c + k * 2];
 						chessBoard[r][c] = " ";
-						AlphaBetaChess.printBoard(chessBoard);
+						chessBoard[r + j][c + k * 2] = "K";
 						if (kingSafe()) {
 							list = list + r + c + (r + j) + (c + k * 2)
 									+ oldPiece;
-						} else {
-							System.out.println("not valid " + r + c + (r + j)
-									+ (c + k * 2) + oldPiece);
-							System.out.println("knig not safe 1");
 						}
 						chessBoard[r][c] = "K";
 						chessBoard[r + j][c + k * 2] = oldPiece;
@@ -386,14 +381,10 @@ public class AlphaBetaChess {
 							|| " ".equals(chessBoard[r + j * 2][c + k])) {
 						oldPiece = chessBoard[r + j * 2][c + k];
 						chessBoard[r][c] = " ";
-						AlphaBetaChess.printBoard(chessBoard);
+						chessBoard[r + j * 2][c + k] = "K";
 						if (kingSafe()) {
 							list = list + r + c + (r + j * 2) + (c + k)
 									+ oldPiece;
-						} else {
-							System.out.println("Not valid " + r + c
-									+ (r + j * 2) + (c + k) + oldPiece);
-							System.out.println("knig not safe 2");
 						}
 						chessBoard[r][c] = "K";
 						chessBoard[r + j * 2][c + k] = oldPiece;

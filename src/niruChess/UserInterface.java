@@ -84,10 +84,10 @@ public class UserInterface extends JPanel implements MouseListener,
 							+ AlphaBetaChess.chessBoard[newRow][newColumn];
 				}
 				String userPosibilities = AlphaBetaChess.posibleMoves();
-				System.out.println("dragMove " + dragMove);
+				// System.out.println("dragMove " + dragMove);
 				if (userPosibilities.contains(dragMove)) {
 					// if valid move
-					System.out.println();
+					// System.out.println();
 					AlphaBetaChess.makeMove(dragMove);
 					AlphaBetaChess.flipBoard();
 					AlphaBetaChess.makeMove(AlphaBetaChess.alphaBeta(
@@ -95,7 +95,7 @@ public class UserInterface extends JPanel implements MouseListener,
 							0));
 					AlphaBetaChess.flipBoard();
 					repaint();
-					AlphaBetaChess.printBoard(AlphaBetaChess.chessBoard);
+					// AlphaBetaChess.printBoard(AlphaBetaChess.chessBoard);
 				} else {
 					System.out.println(dragMove + " not allowed");
 					System.out.println("userPosibilities " + userPosibilities);
