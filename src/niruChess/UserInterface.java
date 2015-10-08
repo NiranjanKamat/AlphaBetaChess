@@ -30,7 +30,12 @@ public class UserInterface extends JPanel implements MouseListener,
 	void paintSquares(Graphics g) {
 		Color white = new Color(255, 200, 100);
 		Color black = new Color(150, 50, 30);
-		Color currentColor = black;
+		Color currentColor = null;
+		if (AlphaBetaChess.humanAsWhite == 1) {
+			currentColor = black;
+		} else {
+			currentColor = white;
+		}
 		for (int i = 0; i < 8; i++) {
 			currentColor = swapColor(white, black, currentColor);
 			for (int j = 0; j < 8; j++) {

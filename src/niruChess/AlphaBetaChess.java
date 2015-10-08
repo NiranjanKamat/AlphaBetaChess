@@ -18,6 +18,7 @@ public class AlphaBetaChess {
 	static int kingPositionC, kingPositionL;
 	static int humanAsWhite = -1;// 1=human as white, 0=human as black
 	static int globalDepth = 4;
+	static boolean kingCMoved, kingLMoved;
 
 	public static void main(String[] args) {
 		while (!"A".equals(chessBoard[kingPositionC / 8][kingPositionC % 8])) {
@@ -33,6 +34,7 @@ public class AlphaBetaChess {
 		 * (1234b represents row1,column2 moves to row3, column4 which captured
 		 * b (a space represents no capture))
 		 */
+		humanAsWhite = 1;
 		JFrame f = new JFrame("Chess Tutorial");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		UserInterface ui = new UserInterface();
