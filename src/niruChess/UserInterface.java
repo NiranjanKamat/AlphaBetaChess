@@ -31,7 +31,7 @@ public class UserInterface extends JPanel implements MouseListener,
 		Color white = new Color(255, 200, 100);
 		Color black = new Color(150, 50, 30);
 		Color currentColor = null;
-		if (AlphaBetaChess.humanAsWhite == 1) {
+		if (UserInterface.humanAsWhite) {
 			currentColor = black;
 		} else {
 			currentColor = white;
