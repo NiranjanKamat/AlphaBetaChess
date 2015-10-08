@@ -121,21 +121,21 @@ public class AlphaBetaChess {
 		String temp;
 		for (int i = 0; i < 32; i++) {
 			int r = i / 8, c = i % 8;
-			if (Character.isUpperCase(chessBoard[r][c].charAt(0))) {
-				temp = chessBoard[r][c].toLowerCase();
-			} else {
-				temp = chessBoard[r][c].toUpperCase();
-			}
-			if (Character.isUpperCase(chessBoard[7 - r][7 - c].charAt(0))) {
-				chessBoard[r][c] = chessBoard[7 - r][7 - c].toLowerCase();
-			} else {
-				chessBoard[r][c] = chessBoard[7 - r][7 - c].toUpperCase();
-			}
+			temp = switchCase(chessBoard[r][c]);
+			chessBoard[r][c] = switchCase(chessBoard[7 - r][7 - c]);
 			chessBoard[7 - r][7 - c] = temp;
 		}
 		int kingTemp = kingPositionC;
 		kingPositionC = 63 - kingPositionL;
 		kingPositionL = 63 - kingTemp;
+	}
+
+	public static String switchCase(String input) {
+		if (Character.isUpperCase(input.charAt(0))) {
+			return input.toLowerCase();
+		} else {
+			return input.toUpperCase();
+		}
 	}
 
 	public static void makeMove(String move) {
