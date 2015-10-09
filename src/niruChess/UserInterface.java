@@ -74,9 +74,17 @@ public class UserInterface extends JPanel implements MouseListener,
 			// if inside the board
 			newColumn = e.getX() / squareSize;
 			newRow = e.getY() / squareSize;
+			System.out.println(oldColumn + "" + newColumn + "" + oldRow + ""
+					+ newRow);
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				String dragMove;
-				if (newRow == 0
+				if ((oldColumn == 4)
+						&& (newColumn == 2)
+						&& (oldRow == 7)
+						&& (newRow == 7)
+						&& ("A".equals(AlphaBetaChess.chessBoard[oldRow][oldColumn]))) {
+					dragMove = "7472Y";
+				} else if (newRow == 0
 						&& oldRow == 1
 						&& "P".equals(AlphaBetaChess.chessBoard[oldRow][oldColumn])) {
 					// pawn promotion
@@ -94,15 +102,22 @@ public class UserInterface extends JPanel implements MouseListener,
 					// if valid move
 					// System.out.println();
 					AlphaBetaChess.makeMove(dragMove);
+					if (dragMove.charAt(4) == 'K') {
+						AlphaBetaChess.kingCMoved = true;
+					}
 					AlphaBetaChess.flipBoard();
-					AlphaBetaChess.makeMove(AlphaBetaChess.alphaBeta(
+					String computerMove = AlphaBetaChess.alphaBeta(
 							AlphaBetaChess.globalDepth, 1000000, -1000000, "",
-							0));
+							0);
+					AlphaBetaChess.makeMove(computerMove);
+					if (dragMove.charAt(4) == 'K') {
+						AlphaBetaChess.kingCMoved = true;
+					}
 					AlphaBetaChess.flipBoard();
 					repaint();
 					// AlphaBetaChess.printBoard(AlphaBetaChess.chessBoard);
 				} else {
-					System.out.println(dragMove + " not allowed");
+					System.out.println(dragMove + " is not allowed");
 					System.out.println("userPosibilities " + userPosibilities);
 				}
 			}

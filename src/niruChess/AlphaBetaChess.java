@@ -17,8 +17,8 @@ public class AlphaBetaChess {
 			{ "R", "K", "B", "Q", "A", "B", "K", "R" } };
 	static int kingPositionC, kingPositionL;
 	static int humanAsWhite = -1;// 1=human as white, 0=human as black
-	static int globalDepth = 4;
-	static boolean kingCMoved, kingLMoved;
+	static int globalDepth = 2;
+	static boolean kingCMoved = false, kingLMoved = false;
 
 	public static void main(String[] args) {
 		while (!"A".equals(chessBoard[kingPositionC / 8][kingPositionC % 8])) {
@@ -49,7 +49,9 @@ public class AlphaBetaChess {
 		if (humanAsWhite == 0) {
 			UserInterface.humanAsWhite = false;
 			long startTime = System.currentTimeMillis();
-			makeMove(alphaBeta(globalDepth, 1000000, -1000000, "", 0));
+			String computerMove = alphaBeta(globalDepth, 1000000, -1000000, "",
+					0);
+			makeMove(computerMove);
 			long endTime = System.currentTimeMillis();
 			System.out.println("That took " + (endTime - startTime)
 					+ " milliseconds");
@@ -127,9 +129,14 @@ public class AlphaBetaChess {
 			chessBoard[r][c] = switchCase(chessBoard[7 - r][7 - c]);
 			chessBoard[7 - r][7 - c] = temp;
 		}
-		int kingTemp = kingPositionC;
+		int positionTemp = kingPositionC;
 		kingPositionC = 63 - kingPositionL;
-		kingPositionL = 63 - kingTemp;
+		kingPositionL = 63 - positionTemp;
+
+		boolean movedTemp;
+		movedTemp = kingCMoved;
+		kingCMoved = kingLMoved;
+		kingLMoved = movedTemp;
 	}
 
 	public static String switchCase(String input) {
@@ -141,7 +148,12 @@ public class AlphaBetaChess {
 	}
 
 	public static void makeMove(String move) {
-		if (move.charAt(4) != 'P') {
+		if (move.charAt(4) == 'Y') {
+			chessBoard[7][2] = "A";
+			chessBoard[7][3] = "R";
+			chessBoard[7][4] = " ";
+			chessBoard[7][0] = " ";
+		} else if (move.charAt(4) != 'P') {
 			chessBoard[Character.getNumericValue(move.charAt(2))][Character
 					.getNumericValue(move.charAt(3))] = chessBoard[Character
 					.getNumericValue(move.charAt(0))][Character
@@ -162,7 +174,12 @@ public class AlphaBetaChess {
 	}
 
 	public static void undoMove(String move) {
-		if (move.charAt(4) != 'P') {
+		if (move.charAt(4) == 'Y') {
+			chessBoard[7][2] = " ";
+			chessBoard[7][3] = " ";
+			chessBoard[7][4] = "A";
+			chessBoard[7][0] = "R";
+		} else if (move.charAt(4) != 'P') {
 			chessBoard[Character.getNumericValue(move.charAt(0))][Character
 					.getNumericValue(move.charAt(1))] = chessBoard[Character
 					.getNumericValue(move.charAt(2))][Character
@@ -480,6 +497,7 @@ public class AlphaBetaChess {
 	}
 
 	public static String possibleKing(int i) {
+		// System.out.println("kingCMoved " + kingCMoved);
 		String list = "", oldPiece;
 		int r = i / 8, c = i % 8;
 		for (int j = 0; j < 9; j++) {
@@ -505,6 +523,25 @@ public class AlphaBetaChess {
 				} catch (Exception e) {
 				}
 			}
+		}
+
+		// Y is castling 7472. Z is castling 7476
+		if (!kingCMoved) {
+			if ((chessBoard[7][0].equals("R"))
+					&& (chessBoard[7][1].equals(" "))
+					&& (chessBoard[7][2].equals(" "))
+					&& (chessBoard[7][3].equals(" "))) {
+				// chessBoard[7][2] = "A";
+				// chessBoard[7][3] = "R";
+				list = list + "7472Y";
+				// System.out.println("possible 7472Y");
+			} else {
+				// System.out.println(chessBoard[7][0] + " " + chessBoard[7][1]
+				// + " " + chessBoard[7][2] + " " + chessBoard[7][3]
+				// + " not possible");
+			}
+		} else {
+			// System.out.println("kingCMoved not allowed");
 		}
 		// need to add casting later
 		return list;
