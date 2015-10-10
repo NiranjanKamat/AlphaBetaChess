@@ -79,6 +79,12 @@ public class UserInterface extends JPanel implements MouseListener,
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				String dragMove;
 				if ((oldColumn == 4)
+						&& (newColumn == 6)
+						&& (oldRow == 7)
+						&& (newRow == 7)
+						&& ("A".equals(AlphaBetaChess.chessBoard[oldRow][oldColumn]))) {
+					dragMove = "7476Z";
+				} else if ((oldColumn == 4)
 						&& (newColumn == 2)
 						&& (oldRow == 7)
 						&& (newRow == 7)
@@ -103,14 +109,16 @@ public class UserInterface extends JPanel implements MouseListener,
 					AlphaBetaChess.makeMove(dragMove);
 					checkKingCMoved(dragMove);
 					checkRook56Moved(dragMove);
+					checkRook63Moved(dragMove);
 					AlphaBetaChess.flipBoard();
 
 					String computerMove = AlphaBetaChess.alphaBeta(
 							AlphaBetaChess.globalDepth, 1000000, -1000000, "",
 							0);
 					AlphaBetaChess.makeMove(computerMove);
-					checkKingCMoved(dragMove);
-					checkRook56Moved(dragMove);
+					checkKingCMoved(computerMove);
+					checkRook56Moved(computerMove);
+					checkRook63Moved(computerMove);
 					AlphaBetaChess.flipBoard();
 					repaint();
 					// AlphaBetaChess.printBoard(AlphaBetaChess.chessBoard);
@@ -122,18 +130,25 @@ public class UserInterface extends JPanel implements MouseListener,
 		}
 	}
 
+	private void checkRook63Moved(String dragMove) {
+		if (dragMove.charAt(4) == 'Z') {
+			AlphaBetaChess.rook63Moved = true;
+		} else if (dragMove.charAt(0) == '7' && dragMove.charAt(1) == '7') {
+			AlphaBetaChess.rook63Moved = true;
+		}
+	}
+
 	private void checkRook56Moved(String dragMove) {
 		if (dragMove.charAt(4) == 'Y') {
 			AlphaBetaChess.rook56Moved = true;
-		}
-		if (dragMove.charAt(0) == '7' && dragMove.charAt(1) == '0') {
+		} else if (dragMove.charAt(0) == '7' && dragMove.charAt(1) == '0') {
 			AlphaBetaChess.rook56Moved = true;
 		}
-
 	}
 
 	void checkKingCMoved(String dragMove) {
-		if ((dragMove.charAt(4) == 'K') || (dragMove.charAt(4) == 'Y')) {
+		if ((dragMove.charAt(4) == 'A') || (dragMove.charAt(4) == 'Y')
+				|| (dragMove.charAt(4) == 'Z')) {
 			AlphaBetaChess.kingCMoved = true;
 		}
 	}

@@ -20,6 +20,7 @@ public class AlphaBetaChess {
 	static int globalDepth = 2;
 	static boolean kingCMoved = false, kingLMoved = false;
 	static boolean rook56Moved = false, rook7Moved = false;
+	static boolean rook63Moved = false, rook0Moved = false;
 
 	public static void main(String[] args) {
 		while (!"A".equals(chessBoard[kingPositionC / 8][kingPositionC % 8])) {
@@ -28,8 +29,6 @@ public class AlphaBetaChess {
 		while (!"a".equals(chessBoard[kingPositionL / 8][kingPositionL % 8])) {
 			kingPositionL++;
 		}
-		System.out.println("kingPositionC " + kingPositionC);
-		System.out.println("kingPositionL " + kingPositionL);
 		// get king's location
 		/*
 		 * PIECE=WHITE/black pawn=P/p kinght (horse)=K/k bishop=B/b rook
@@ -137,14 +136,17 @@ public class AlphaBetaChess {
 		kingPositionC = 63 - kingPositionL;
 		kingPositionL = 63 - positionTemp;
 
-		boolean movedTemp;
-		movedTemp = kingCMoved;
+		boolean movedTemp = kingCMoved;
 		kingCMoved = kingLMoved;
 		kingLMoved = movedTemp;
 
-		boolean rookTemp = rook56Moved;
+		boolean rook56Temp = rook56Moved;
 		rook56Moved = rook7Moved;
-		rook7Moved = rookTemp;
+		rook7Moved = rook56Temp;
+
+		boolean rook63Temp = rook63Moved;
+		rook63Moved = rook0Moved;
+		rook0Moved = rook63Temp;
 	}
 
 	public static String switchCase(String input) {
@@ -156,12 +158,10 @@ public class AlphaBetaChess {
 	}
 
 	public static void makeMove(String move) {
-		if (move.charAt(4) == 'Y') {
-			chessBoard[7][2] = "A";
-			chessBoard[7][3] = "R";
-			chessBoard[7][4] = " ";
-			chessBoard[7][0] = " ";
-			kingPositionC = 58;
+		if (move.charAt(4) == 'Z') {
+			castleRight();
+		} else if (move.charAt(4) == 'Y') {
+			castleLeft();
 		} else if (move.charAt(4) != 'P') {
 			chessBoard[Character.getNumericValue(move.charAt(2))][Character
 					.getNumericValue(move.charAt(3))] = chessBoard[Character
@@ -183,12 +183,10 @@ public class AlphaBetaChess {
 	}
 
 	public static void undoMove(String move) {
-		if (move.charAt(4) == 'Y') {
-			chessBoard[7][2] = " ";
-			chessBoard[7][3] = " ";
-			chessBoard[7][4] = "A";
-			chessBoard[7][0] = "R";
-			kingPositionC = 60;
+		if (move.charAt(4) == 'Z') {
+			uncastleRight();
+		} else if (move.charAt(4) == 'Y') {
+			uncastleLeft();
 		} else if (move.charAt(4) != 'P') {
 			chessBoard[Character.getNumericValue(move.charAt(0))][Character
 					.getNumericValue(move.charAt(1))] = chessBoard[Character
@@ -542,27 +540,56 @@ public class AlphaBetaChess {
 					&& (chessBoard[7][1].equals(" "))
 					&& (chessBoard[7][2].equals(" "))
 					&& (chessBoard[7][3].equals(" "))) {
-				kingPositionC -= 2;
-				chessBoard[7][2] = "A";
-				chessBoard[7][3] = "R";
-				chessBoard[7][0] = " ";
-				chessBoard[7][4] = " ";
+				castleLeft();
 				if (kingSafe()) {
 					list = list + "7472Y";
 				}
-				chessBoard[7][2] = " ";
-				chessBoard[7][3] = " ";
-				chessBoard[7][0] = "R";
-				chessBoard[7][4] = "A";
-				kingPositionC += 2;
-				// chessBoard[7][2] = "A";
-				// chessBoard[7][3] = "R";
-
-				// System.out.println("possible 7472Y");
+				uncastleLeft();
+			}
+			if (!rook63Moved && (chessBoard[7][7].equals("R"))
+					&& (chessBoard[7][6].equals(" "))
+					&& (chessBoard[7][5].equals(" "))) {
+				castleRight();
+				if (kingSafe()) {
+					list = list + "7476Z";
+				}
+				uncastleRight();
 			}
 		}
 		// need to add casting later
 		return list;
+	}
+
+	static void castleLeft() {
+		chessBoard[7][2] = "A";
+		chessBoard[7][3] = "R";
+		chessBoard[7][0] = " ";
+		chessBoard[7][4] = " ";
+		kingPositionC -= 2;
+	}
+
+	static void uncastleLeft() {
+		chessBoard[7][2] = " ";
+		chessBoard[7][3] = " ";
+		chessBoard[7][0] = "R";
+		chessBoard[7][4] = "A";
+		kingPositionC += 2;
+	}
+
+	static void castleRight() {
+		chessBoard[7][6] = "A";
+		chessBoard[7][5] = "R";
+		chessBoard[7][4] = " ";
+		chessBoard[7][7] = " ";
+		kingPositionC += 2;
+	}
+
+	static void uncastleRight() {
+		chessBoard[7][5] = " ";
+		chessBoard[7][6] = " ";
+		chessBoard[7][7] = "R";
+		chessBoard[7][4] = "A";
+		kingPositionC -= 2;
 	}
 
 	public static String sortMoves(String list) {
