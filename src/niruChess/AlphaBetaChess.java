@@ -19,6 +19,7 @@ public class AlphaBetaChess {
 	static int humanAsWhite = -1;// 1=human as white, 0=human as black
 	static int globalDepth = 2;
 	static boolean kingCMoved = false, kingLMoved = false;
+	static boolean rook56Moved = false, rook7Moved = false;
 
 	public static void main(String[] args) {
 		while (!"A".equals(chessBoard[kingPositionC / 8][kingPositionC % 8])) {
@@ -140,6 +141,10 @@ public class AlphaBetaChess {
 		movedTemp = kingCMoved;
 		kingCMoved = kingLMoved;
 		kingLMoved = movedTemp;
+
+		boolean rookTemp = rook56Moved;
+		rook56Moved = rook7Moved;
+		rook7Moved = rookTemp;
 	}
 
 	public static String switchCase(String input) {
@@ -533,7 +538,7 @@ public class AlphaBetaChess {
 		// Y is castling 7472. Z is castling 7476
 		// TODO Checking and undoing
 		if (!kingCMoved) {
-			if ((chessBoard[7][0].equals("R"))
+			if (!rook56Moved && (chessBoard[7][0].equals("R"))
 					&& (chessBoard[7][1].equals(" "))
 					&& (chessBoard[7][2].equals(" "))
 					&& (chessBoard[7][3].equals(" "))) {

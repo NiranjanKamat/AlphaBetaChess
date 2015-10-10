@@ -100,21 +100,17 @@ public class UserInterface extends JPanel implements MouseListener,
 				// System.out.println("dragMove " + dragMove);
 				if (userPosibilities.contains(dragMove)) {
 					// if valid move
-					// System.out.println();
 					AlphaBetaChess.makeMove(dragMove);
-					if ((dragMove.charAt(4) == 'K')
-							|| (dragMove.charAt(4) == 'Y')) {
-						AlphaBetaChess.kingCMoved = true;
-					}
+					checkKingCMoved(dragMove);
+					checkRook56Moved(dragMove);
 					AlphaBetaChess.flipBoard();
+
 					String computerMove = AlphaBetaChess.alphaBeta(
 							AlphaBetaChess.globalDepth, 1000000, -1000000, "",
 							0);
 					AlphaBetaChess.makeMove(computerMove);
-					if ((dragMove.charAt(4) == 'K')
-							|| (dragMove.charAt(4) == 'Y')) {
-						AlphaBetaChess.kingCMoved = true;
-					}
+					checkKingCMoved(dragMove);
+					checkRook56Moved(dragMove);
 					AlphaBetaChess.flipBoard();
 					repaint();
 					// AlphaBetaChess.printBoard(AlphaBetaChess.chessBoard);
@@ -123,6 +119,22 @@ public class UserInterface extends JPanel implements MouseListener,
 					System.out.println("userPosibilities " + userPosibilities);
 				}
 			}
+		}
+	}
+
+	private void checkRook56Moved(String dragMove) {
+		if (dragMove.charAt(4) == 'Y') {
+			AlphaBetaChess.rook56Moved = true;
+		}
+		if (dragMove.charAt(0) == '7' && dragMove.charAt(1) == '0') {
+			AlphaBetaChess.rook56Moved = true;
+		}
+
+	}
+
+	void checkKingCMoved(String dragMove) {
+		if ((dragMove.charAt(4) == 'K') || (dragMove.charAt(4) == 'Y')) {
+			AlphaBetaChess.kingCMoved = true;
 		}
 	}
 
