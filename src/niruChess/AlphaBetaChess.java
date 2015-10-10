@@ -26,7 +26,10 @@ public class AlphaBetaChess {
 		}// get King's location
 		while (!"a".equals(chessBoard[kingPositionL / 8][kingPositionL % 8])) {
 			kingPositionL++;
-		}// get king's location
+		}
+		System.out.println("kingPositionC " + kingPositionC);
+		System.out.println("kingPositionL " + kingPositionL);
+		// get king's location
 		/*
 		 * PIECE=WHITE/black pawn=P/p kinght (horse)=K/k bishop=B/b rook
 		 * (castle)=R/r Queen=Q/q King=A/a
@@ -153,6 +156,7 @@ public class AlphaBetaChess {
 			chessBoard[7][3] = "R";
 			chessBoard[7][4] = " ";
 			chessBoard[7][0] = " ";
+			kingPositionC = 58;
 		} else if (move.charAt(4) != 'P') {
 			chessBoard[Character.getNumericValue(move.charAt(2))][Character
 					.getNumericValue(move.charAt(3))] = chessBoard[Character
@@ -179,6 +183,7 @@ public class AlphaBetaChess {
 			chessBoard[7][3] = " ";
 			chessBoard[7][4] = "A";
 			chessBoard[7][0] = "R";
+			kingPositionC = 60;
 		} else if (move.charAt(4) != 'P') {
 			chessBoard[Character.getNumericValue(move.charAt(0))][Character
 					.getNumericValue(move.charAt(1))] = chessBoard[Character
@@ -526,22 +531,30 @@ public class AlphaBetaChess {
 		}
 
 		// Y is castling 7472. Z is castling 7476
+		// TODO Checking and undoing
 		if (!kingCMoved) {
 			if ((chessBoard[7][0].equals("R"))
 					&& (chessBoard[7][1].equals(" "))
 					&& (chessBoard[7][2].equals(" "))
 					&& (chessBoard[7][3].equals(" "))) {
+				kingPositionC -= 2;
+				chessBoard[7][2] = "A";
+				chessBoard[7][3] = "R";
+				chessBoard[7][0] = " ";
+				chessBoard[7][4] = " ";
+				if (kingSafe()) {
+					list = list + "7472Y";
+				}
+				chessBoard[7][2] = " ";
+				chessBoard[7][3] = " ";
+				chessBoard[7][0] = "R";
+				chessBoard[7][4] = "A";
+				kingPositionC += 2;
 				// chessBoard[7][2] = "A";
 				// chessBoard[7][3] = "R";
-				list = list + "7472Y";
+
 				// System.out.println("possible 7472Y");
-			} else {
-				// System.out.println(chessBoard[7][0] + " " + chessBoard[7][1]
-				// + " " + chessBoard[7][2] + " " + chessBoard[7][3]
-				// + " not possible");
 			}
-		} else {
-			// System.out.println("kingCMoved not allowed");
 		}
 		// need to add casting later
 		return list;

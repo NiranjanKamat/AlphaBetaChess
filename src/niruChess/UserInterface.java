@@ -102,7 +102,8 @@ public class UserInterface extends JPanel implements MouseListener,
 					// if valid move
 					// System.out.println();
 					AlphaBetaChess.makeMove(dragMove);
-					if (dragMove.charAt(4) == 'K') {
+					if ((dragMove.charAt(4) == 'K')
+							|| (dragMove.charAt(4) == 'Y')) {
 						AlphaBetaChess.kingCMoved = true;
 					}
 					AlphaBetaChess.flipBoard();
@@ -110,7 +111,8 @@ public class UserInterface extends JPanel implements MouseListener,
 							AlphaBetaChess.globalDepth, 1000000, -1000000, "",
 							0);
 					AlphaBetaChess.makeMove(computerMove);
-					if (dragMove.charAt(4) == 'K') {
+					if ((dragMove.charAt(4) == 'K')
+							|| (dragMove.charAt(4) == 'Y')) {
 						AlphaBetaChess.kingCMoved = true;
 					}
 					AlphaBetaChess.flipBoard();
