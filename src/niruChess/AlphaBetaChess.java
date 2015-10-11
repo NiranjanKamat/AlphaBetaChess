@@ -132,6 +132,7 @@ public class AlphaBetaChess {
 			chessBoard[r][c] = switchCase(chessBoard[7 - r][7 - c]);
 			chessBoard[7 - r][7 - c] = temp;
 		}
+
 		int positionTemp = kingPositionC;
 		kingPositionC = 63 - kingPositionL;
 		kingPositionL = 63 - positionTemp;
@@ -162,7 +163,12 @@ public class AlphaBetaChess {
 			castleRight();
 		} else if (move.charAt(4) == 'Y') {
 			castleLeft();
-		} else if (move.charAt(4) != 'P') {
+		} else if (move.charAt(4) == 'P') {
+			// if pawn promotion
+			chessBoard[1][Character.getNumericValue(move.charAt(0))] = " ";
+			chessBoard[0][Character.getNumericValue(move.charAt(1))] = String
+					.valueOf(move.charAt(3));
+		} else {
 			chessBoard[Character.getNumericValue(move.charAt(2))][Character
 					.getNumericValue(move.charAt(3))] = chessBoard[Character
 					.getNumericValue(move.charAt(0))][Character
@@ -174,11 +180,6 @@ public class AlphaBetaChess {
 				kingPositionC = 8 * Character.getNumericValue(move.charAt(2))
 						+ Character.getNumericValue(move.charAt(3));
 			}
-		} else {
-			// if pawn promotion
-			chessBoard[1][Character.getNumericValue(move.charAt(0))] = " ";
-			chessBoard[0][Character.getNumericValue(move.charAt(1))] = String
-					.valueOf(move.charAt(3));
 		}
 	}
 
@@ -187,7 +188,12 @@ public class AlphaBetaChess {
 			uncastleRight();
 		} else if (move.charAt(4) == 'Y') {
 			uncastleLeft();
-		} else if (move.charAt(4) != 'P') {
+		} else if (move.charAt(4) == 'P') {
+			// if pawn promotion
+			chessBoard[1][Character.getNumericValue(move.charAt(0))] = "P";
+			chessBoard[0][Character.getNumericValue(move.charAt(1))] = String
+					.valueOf(move.charAt(2));
+		} else {
 			chessBoard[Character.getNumericValue(move.charAt(0))][Character
 					.getNumericValue(move.charAt(1))] = chessBoard[Character
 					.getNumericValue(move.charAt(2))][Character
@@ -200,11 +206,6 @@ public class AlphaBetaChess {
 				kingPositionC = 8 * Character.getNumericValue(move.charAt(0))
 						+ Character.getNumericValue(move.charAt(1));
 			}
-		} else {
-			// if pawn promotion
-			chessBoard[1][Character.getNumericValue(move.charAt(0))] = "P";
-			chessBoard[0][Character.getNumericValue(move.charAt(1))] = String
-					.valueOf(move.charAt(2));
 		}
 	}
 
@@ -535,27 +536,27 @@ public class AlphaBetaChess {
 
 		// Y is castling 7472. Z is castling 7476
 		// TODO Checking and undoing
-		if (!kingCMoved) {
-			if (!rook56Moved && (chessBoard[7][0].equals("R"))
-					&& (chessBoard[7][1].equals(" "))
-					&& (chessBoard[7][2].equals(" "))
-					&& (chessBoard[7][3].equals(" "))) {
-				castleLeft();
-				if (kingSafe()) {
-					list = list + "7472Y";
-				}
-				uncastleLeft();
-			}
-			if (!rook63Moved && (chessBoard[7][7].equals("R"))
-					&& (chessBoard[7][6].equals(" "))
-					&& (chessBoard[7][5].equals(" "))) {
-				castleRight();
-				if (kingSafe()) {
-					list = list + "7476Z";
-				}
-				uncastleRight();
-			}
-		}
+		// if (!kingCMoved) {
+		// if (!rook56Moved && (chessBoard[7][0].equals("R"))
+		// && (chessBoard[7][1].equals(" "))
+		// && (chessBoard[7][2].equals(" "))
+		// && (chessBoard[7][3].equals(" "))) {
+		// castleLeft();
+		// if (kingSafe()) {
+		// list = list + "7472Y";
+		// }
+		// uncastleLeft();
+		// }
+		// if (!rook63Moved && (chessBoard[7][7].equals("R"))
+		// && (chessBoard[7][6].equals(" "))
+		// && (chessBoard[7][5].equals(" "))) {
+		// castleRight();
+		// if (kingSafe()) {
+		// list = list + "7476Z";
+		// }
+		// uncastleRight();
+		// }
+		// }
 		// need to add casting later
 		return list;
 	}
@@ -566,6 +567,8 @@ public class AlphaBetaChess {
 		chessBoard[7][0] = " ";
 		chessBoard[7][4] = " ";
 		kingPositionC -= 2;
+		kingCMoved = true;
+		rook56Moved = true;
 	}
 
 	static void uncastleLeft() {
@@ -574,6 +577,8 @@ public class AlphaBetaChess {
 		chessBoard[7][0] = "R";
 		chessBoard[7][4] = "A";
 		kingPositionC += 2;
+		kingCMoved = false;
+		rook56Moved = false;
 	}
 
 	static void castleRight() {
@@ -582,6 +587,8 @@ public class AlphaBetaChess {
 		chessBoard[7][4] = " ";
 		chessBoard[7][7] = " ";
 		kingPositionC += 2;
+		kingCMoved = true;
+		rook63Moved = true;
 	}
 
 	static void uncastleRight() {
@@ -590,6 +597,8 @@ public class AlphaBetaChess {
 		chessBoard[7][7] = "R";
 		chessBoard[7][4] = "A";
 		kingPositionC -= 2;
+		kingCMoved = false;
+		rook63Moved = false;
 	}
 
 	public static String sortMoves(String list) {

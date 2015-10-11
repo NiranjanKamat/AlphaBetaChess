@@ -107,21 +107,15 @@ public class UserInterface extends JPanel implements MouseListener,
 				if (userPosibilities.contains(dragMove)) {
 					// if valid move
 					AlphaBetaChess.makeMove(dragMove);
-					checkKingCMoved(dragMove);
-					checkRook56Moved(dragMove);
-					checkRook63Moved(dragMove);
-					AlphaBetaChess.flipBoard();
+					postMove(dragMove);
 
 					String computerMove = AlphaBetaChess.alphaBeta(
 							AlphaBetaChess.globalDepth, 1000000, -1000000, "",
-							0);
+							0).substring(0, 5);
+					System.out.println("computerMove " + computerMove);
 					AlphaBetaChess.makeMove(computerMove);
-					checkKingCMoved(computerMove);
-					checkRook56Moved(computerMove);
-					checkRook63Moved(computerMove);
-					AlphaBetaChess.flipBoard();
+					postMove(computerMove);
 					repaint();
-					// AlphaBetaChess.printBoard(AlphaBetaChess.chessBoard);
 				} else {
 					System.out.println(dragMove + " is not allowed");
 					System.out.println("userPosibilities " + userPosibilities);
@@ -130,25 +124,32 @@ public class UserInterface extends JPanel implements MouseListener,
 		}
 	}
 
-	private void checkRook63Moved(String dragMove) {
-		if (dragMove.charAt(4) == 'Z') {
+	void postMove(String move) {
+		checkKingCMoved(move);
+		checkRook56Moved(move);
+		checkRook63Moved(move);
+		AlphaBetaChess.flipBoard();
+	}
+
+	private void checkRook63Moved(String move) {
+		if (move.charAt(4) == 'Z') {
 			AlphaBetaChess.rook63Moved = true;
-		} else if (dragMove.charAt(0) == '7' && dragMove.charAt(1) == '7') {
+		} else if (move.charAt(0) == '7' && move.charAt(1) == '7') {
 			AlphaBetaChess.rook63Moved = true;
 		}
 	}
 
-	private void checkRook56Moved(String dragMove) {
-		if (dragMove.charAt(4) == 'Y') {
+	private void checkRook56Moved(String move) {
+		if (move.charAt(4) == 'Y') {
 			AlphaBetaChess.rook56Moved = true;
-		} else if (dragMove.charAt(0) == '7' && dragMove.charAt(1) == '0') {
+		} else if (move.charAt(0) == '7' && move.charAt(1) == '0') {
 			AlphaBetaChess.rook56Moved = true;
 		}
 	}
 
-	void checkKingCMoved(String dragMove) {
-		if ((dragMove.charAt(4) == 'A') || (dragMove.charAt(4) == 'Y')
-				|| (dragMove.charAt(4) == 'Z')) {
+	void checkKingCMoved(String move) {
+		if ((move.charAt(4) == 'A') || (move.charAt(4) == 'Y')
+				|| (move.charAt(4) == 'Z')) {
 			AlphaBetaChess.kingCMoved = true;
 		}
 	}
