@@ -40,8 +40,7 @@ public class UserInterface extends JPanel implements MouseListener,
 			currentColor = swapColor(white, black, currentColor);
 			for (int j = 0; j < 8; j++) {
 				g.setColor(currentColor);
-				g.fillRect(i * squareSize, j * squareSize, squareSize,
-						squareSize);
+				g.fillRect(i * squareSize, j * squareSize, squareSize, squareSize);
 				currentColor = swapColor(white, black, currentColor);
 			}
 		}
@@ -74,33 +73,35 @@ public class UserInterface extends JPanel implements MouseListener,
 			// if inside the board
 			newColumn = e.getX() / squareSize;
 			newRow = e.getY() / squareSize;
-			System.out.println(oldColumn + "" + newColumn + "" + oldRow + ""
-					+ newRow);
+			System.out
+					.println(oldColumn + "" + newColumn + "" + oldRow + "" + newRow);
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				String dragMove;
 				if ((oldColumn == 4)
 						&& (newColumn == 6)
 						&& (oldRow == 7)
 						&& (newRow == 7)
-						&& ("A".equals(AlphaBetaChess.chessBoard[oldRow][oldColumn]))) {
+						&& ("A".equals(AlphaBetaChess.chessBoard
+								.get(oldRow, oldColumn)))) {
 					dragMove = "7476Z";
 				} else if ((oldColumn == 4)
 						&& (newColumn == 2)
 						&& (oldRow == 7)
 						&& (newRow == 7)
-						&& ("A".equals(AlphaBetaChess.chessBoard[oldRow][oldColumn]))) {
+						&& ("A".equals(AlphaBetaChess.chessBoard
+								.get(oldRow, oldColumn)))) {
 					dragMove = "7472Y";
 				} else if (newRow == 0
 						&& oldRow == 1
-						&& "P".equals(AlphaBetaChess.chessBoard[oldRow][oldColumn])) {
+						&& "P"
+								.equals(AlphaBetaChess.chessBoard.get(oldRow, oldColumn))) {
 					// pawn promotion
 					dragMove = "" + oldColumn + newColumn
-							+ AlphaBetaChess.chessBoard[newRow][newColumn]
-							+ "QP";
+							+ AlphaBetaChess.chessBoard.get(newRow, newColumn) + "QP";
 				} else {
 					// regular move
 					dragMove = "" + oldRow + oldColumn + newRow + newColumn
-							+ AlphaBetaChess.chessBoard[newRow][newColumn];
+							+ AlphaBetaChess.chessBoard.get(newRow, newColumn);
 				}
 				String userPosibilities = AlphaBetaChess.posibleMoves();
 				// System.out.println("dragMove " + dragMove);
@@ -110,8 +111,8 @@ public class UserInterface extends JPanel implements MouseListener,
 					postMove(dragMove);
 
 					String computerMove = AlphaBetaChess.alphaBeta(
-							AlphaBetaChess.globalDepth, 1000000, -1000000, "",
-							0).substring(0, 5);
+							AlphaBetaChess.globalDepth, 1000000, -1000000, "", 0).substring(
+							0, 5);
 					System.out.println("computerMove " + computerMove);
 					AlphaBetaChess.makeMove(computerMove);
 					postMove(computerMove);
@@ -177,7 +178,7 @@ public class UserInterface extends JPanel implements MouseListener,
 	void paintPieces(Graphics g, Image chessPiecesImage) {
 		for (int i = 0; i < 64; i++) {
 			int j = -1, k = -1;
-			switch (AlphaBetaChess.chessBoard[i / 8][i % 8]) {
+			switch (AlphaBetaChess.chessBoard.get(i / 8, i % 8)) {
 				case "P":
 					j = 5;
 					k = 0;
@@ -232,9 +233,8 @@ public class UserInterface extends JPanel implements MouseListener,
 			}
 			if (j != -1 && k != -1) {
 				g.drawImage(chessPiecesImage, (i % 8) * squareSize, (i / 8)
-						* squareSize, (i % 8 + 1) * squareSize, (i / 8 + 1)
-						* squareSize, j * 64, k * 64, (j + 1) * 64,
-						(k + 1) * 64, this);
+						* squareSize, (i % 8 + 1) * squareSize, (i / 8 + 1) * squareSize,
+						j * 64, k * 64, (j + 1) * 64, (k + 1) * 64, this);
 			}
 		}
 	}
