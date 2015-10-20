@@ -66,47 +66,41 @@ public class Rating {
 
 	public static int rateAttack() {
 		int counter = 0;
-		int tempPositionC = AlphaBetaChess.kingPositionC;
 		for (int i = 0; i < 64; i++) {
 			switch (AlphaBetaChess.chessBoard[i / 8][i % 8]) {
 				case "P": {
-					AlphaBetaChess.kingPositionC = i;
-					if (!AlphaBetaChess.kingSafe()) {
+
+					if (!AlphaBetaChess.squareSafe(i)) {
 						counter -= 64;
 					}
 				}
 					break;
 				case "R": {
-					AlphaBetaChess.kingPositionC = i;
-					if (!AlphaBetaChess.kingSafe()) {
+					if (!AlphaBetaChess.squareSafe(i)) {
 						counter -= 500;
 					}
 				}
 					break;
 				case "K": {
-					AlphaBetaChess.kingPositionC = i;
-					if (!AlphaBetaChess.kingSafe()) {
+					if (!AlphaBetaChess.squareSafe(i)) {
 						counter -= 300;
 					}
 				}
 					break;
 				case "B": {
-					AlphaBetaChess.kingPositionC = i;
-					if (!AlphaBetaChess.kingSafe()) {
+					if (!AlphaBetaChess.squareSafe(i)) {
 						counter -= 300;
 					}
 				}
 					break;
 				case "Q": {
-					AlphaBetaChess.kingPositionC = i;
-					if (!AlphaBetaChess.kingSafe()) {
+					if (!AlphaBetaChess.squareSafe(i)) {
 						counter -= 900;
 					}
 				}
 					break;
 			}
 		}
-		AlphaBetaChess.kingPositionC = tempPositionC;
 		if (!AlphaBetaChess.kingSafe()) {
 			counter -= 200;
 		}
@@ -154,6 +148,7 @@ public class Rating {
 				counter += -150000 * depth;
 			}
 		}
+		// TODO Don't know why return 0
 		return 0;
 	}
 
@@ -180,11 +175,11 @@ public class Rating {
 					if (material >= 1750) {
 						counter += kingMidBoard[i / 8][i % 8];
 						counter += AlphaBetaChess.possibleKing(
-								AlphaBetaChess.kingPositionC).length() * 10;
+								AlphaBetaChess.kingPositionC()).length() * 10;
 					} else {
 						counter += kingEndBoard[i / 8][i % 8];
 						counter += AlphaBetaChess.possibleKing(
-								AlphaBetaChess.kingPositionC).length() * 30;
+								AlphaBetaChess.kingPositionC()).length() * 30;
 					}
 					break;
 			}
