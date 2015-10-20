@@ -23,7 +23,6 @@ public class AlphaBetaChess {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(UserInterface.pawnPromotion());
 		/*
 		 * PIECE=WHITE/black pawn=P/p kinght (horse)=K/k bishop=B/b rook
 		 * (castle)=R/r Queen=Q/q King=A/a
@@ -237,7 +236,7 @@ public class AlphaBetaChess {
 			}
 			try {// promotion && capture
 				if (Character.isLowerCase(chessBoard.get(r - 1, c + j)
-						.charAt(0)) && i < 16) {
+						.charAt(0)) && i < 16 && i >= 8) {
 					String[] temp = { "Q", "R", "B", "K" };
 					for (int k = 0; k < 4; k++) {
 						oldPiece = chessBoard.get(r - 1, c + j);
@@ -257,14 +256,13 @@ public class AlphaBetaChess {
 		}
 		try {// move one up
 			if (" ".equals(chessBoard.get(r - 1, c)) && i >= 16) {
-				oldPiece = chessBoard.get(r - 1, c);
 				chessBoard.set(r, c, " ");
 				chessBoard.set(r - 1, c, "P");
 				if (kingSafe()) {
-					list = list + r + c + (r - 1) + c + oldPiece;
+					list = list + r + c + (r - 1) + c + " ";
 				}
 				chessBoard.set(r, c, "P");
-				chessBoard.set(r - 1, c, oldPiece);
+				chessBoard.set(r - 1, c, " ");
 			}
 		} catch (Exception e) {
 		}
@@ -272,15 +270,14 @@ public class AlphaBetaChess {
 			if (" ".equals(chessBoard.get(r - 1, c)) && i < 16) {
 				String[] temp = { "Q", "R", "B", "K" };
 				for (int k = 0; k < 4; k++) {
-					oldPiece = chessBoard.get(r - 1, c);
 					chessBoard.set(r, c, " ");
 					chessBoard.set(r - 1, c, temp[k]);
 					if (kingSafe()) {
 						// column1,column2,captured-piece,new-piece,P
-						list = list + c + c + oldPiece + temp[k] + "P";
+						list = list + c + c + " " + temp[k] + "P";
 					}
 					chessBoard.set(r, c, "P");
-					chessBoard.set(r - 1, c, oldPiece);
+					chessBoard.set(r - 1, c, " ");
 				}
 			}
 		} catch (Exception e) {

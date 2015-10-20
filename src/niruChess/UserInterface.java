@@ -100,7 +100,7 @@ public class UserInterface extends JPanel implements MouseListener,
 					// pawn promotion
 					dragMove = "" + oldColumn + newColumn
 							+ AlphaBetaChess.chessBoard.get(newRow, newColumn)
-							+ "QP";
+							+ pawnPromotion() + "P";
 				} else {
 					// regular move
 					dragMove = "" + oldRow + oldColumn + newRow + newColumn
