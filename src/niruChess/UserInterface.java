@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class UserInterface extends JPanel implements MouseListener,
@@ -40,7 +41,8 @@ public class UserInterface extends JPanel implements MouseListener,
 			currentColor = swapColor(white, black, currentColor);
 			for (int j = 0; j < 8; j++) {
 				g.setColor(currentColor);
-				g.fillRect(i * squareSize, j * squareSize, squareSize, squareSize);
+				g.fillRect(i * squareSize, j * squareSize, squareSize,
+						squareSize);
 				currentColor = swapColor(white, black, currentColor);
 			}
 		}
@@ -73,31 +75,32 @@ public class UserInterface extends JPanel implements MouseListener,
 			// if inside the board
 			newColumn = e.getX() / squareSize;
 			newRow = e.getY() / squareSize;
-			System.out
-					.println(oldColumn + "" + newColumn + "" + oldRow + "" + newRow);
+			System.out.println(oldColumn + "" + newColumn + "" + oldRow + ""
+					+ newRow);
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				String dragMove;
 				if ((oldColumn == 4)
 						&& (newColumn == 6)
 						&& (oldRow == 7)
 						&& (newRow == 7)
-						&& ("A".equals(AlphaBetaChess.chessBoard
-								.get(oldRow, oldColumn)))) {
+						&& ("A".equals(AlphaBetaChess.chessBoard.get(oldRow,
+								oldColumn)))) {
 					dragMove = "7476Z";
 				} else if ((oldColumn == 4)
 						&& (newColumn == 2)
 						&& (oldRow == 7)
 						&& (newRow == 7)
-						&& ("A".equals(AlphaBetaChess.chessBoard
-								.get(oldRow, oldColumn)))) {
+						&& ("A".equals(AlphaBetaChess.chessBoard.get(oldRow,
+								oldColumn)))) {
 					dragMove = "7472Y";
 				} else if (newRow == 0
 						&& oldRow == 1
-						&& "P"
-								.equals(AlphaBetaChess.chessBoard.get(oldRow, oldColumn))) {
+						&& "P".equals(AlphaBetaChess.chessBoard.get(oldRow,
+								oldColumn))) {
 					// pawn promotion
 					dragMove = "" + oldColumn + newColumn
-							+ AlphaBetaChess.chessBoard.get(newRow, newColumn) + "QP";
+							+ AlphaBetaChess.chessBoard.get(newRow, newColumn)
+							+ "QP";
 				} else {
 					// regular move
 					dragMove = "" + oldRow + oldColumn + newRow + newColumn
@@ -111,8 +114,8 @@ public class UserInterface extends JPanel implements MouseListener,
 					postMove(dragMove);
 
 					String computerMove = AlphaBetaChess.alphaBeta(
-							AlphaBetaChess.globalDepth, 1000000, -1000000, "", 0).substring(
-							0, 5);
+							AlphaBetaChess.globalDepth, 1000000, -1000000, "",
+							0).substring(0, 5);
 					System.out.println("computerMove " + computerMove);
 					AlphaBetaChess.makeMove(computerMove);
 					postMove(computerMove);
@@ -233,10 +236,31 @@ public class UserInterface extends JPanel implements MouseListener,
 			}
 			if (j != -1 && k != -1) {
 				g.drawImage(chessPiecesImage, (i % 8) * squareSize, (i / 8)
-						* squareSize, (i % 8 + 1) * squareSize, (i / 8 + 1) * squareSize,
-						j * 64, k * 64, (j + 1) * 64, (k + 1) * 64, this);
+						* squareSize, (i % 8 + 1) * squareSize, (i / 8 + 1)
+						* squareSize, j * 64, k * 64, (j + 1) * 64,
+						(k + 1) * 64, this);
 			}
 		}
 	}
 
+	static String pawnPromotion() {
+		while (true) {
+			Object[] optionNew = { "Knight", "Bishop", "Rook", "Queen" };
+			int out = JOptionPane
+					.showOptionDialog(null, "Promote To", "Pawn Promotion",
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, optionNew,
+							optionNew[0]);
+			switch (out) {
+				case 0:
+					return "K";
+				case 1:
+					return "B";
+				case 2:
+					return "R";
+				case 3:
+					return "Q";
+			}
+		}
+	}
 }

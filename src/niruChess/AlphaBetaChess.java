@@ -23,6 +23,7 @@ public class AlphaBetaChess {
 	}
 
 	public static void main(String[] args) {
+		System.out.println(UserInterface.pawnPromotion());
 		/*
 		 * PIECE=WHITE/black pawn=P/p kinght (horse)=K/k bishop=B/b rook
 		 * (castle)=R/r Queen=Q/q King=A/a
