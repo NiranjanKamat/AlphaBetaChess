@@ -540,29 +540,31 @@ public class AlphaBetaChess {
 		}
 
 		// Y is castling 7472. Z is castling 7476
-		// TODO Checking and undoing
-		// if (!kingCMoved) {
-		// if (!rook56Moved && (chessBoard[7][0].equals("R"))
-		// && (chessBoard[7][1].equals(" "))
-		// && (chessBoard[7][2].equals(" "))
-		// && (chessBoard[7][3].equals(" "))) {
-		// castleLeft();
-		// if (kingSafe()) {
-		// list = list + "7472Y";
-		// }
-		// uncastleLeft();
-		// }
-		// if (!rook63Moved && (chessBoard[7][7].equals("R"))
-		// && (chessBoard[7][6].equals(" "))
-		// && (chessBoard[7][5].equals(" "))) {
-		// castleRight();
-		// if (kingSafe()) {
-		// list = list + "7476Z";
-		// }
-		// uncastleRight();
-		// }
-		// }
-		// need to add casting later
+
+		if (!kingCMoved) {
+			if (chessBoard.get(7, 4).equals("A") && !rook56Moved
+					&& (chessBoard.get(7, 0).equals("R"))
+					&& (chessBoard.get(7, 1).equals(" "))
+					&& (chessBoard.get(7, 2).equals(" "))
+					&& (chessBoard.get(7, 3).equals(" "))) {
+				castleLeft();
+				if (kingSafe()) {
+					list = list + "7472Y";
+				}
+				uncastleLeft();
+			}
+			if (chessBoard.get(7, 4).equals("A") && !rook63Moved
+					&& (chessBoard.get(7, 7).equals("R"))
+					&& (chessBoard.get(7, 6).equals(" "))
+					&& (chessBoard.get(7, 5).equals(" "))) {
+				castleRight();
+				if (kingSafe()) {
+					list = list + "7476Z";
+				}
+				uncastleRight();
+			}
+		}
+
 		return list;
 	}
 
