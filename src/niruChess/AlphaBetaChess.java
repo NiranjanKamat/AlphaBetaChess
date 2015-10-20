@@ -6,29 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class AlphaBetaChess {
-	// <<<<<<< HEAD
-	// static String chessBoard[][] = {
-	// { "r", "k", "b", "q", "a", "b", "k", "r" },
-	// { "p", "p", "p", "p", "p", "p", "p", "p" },
-	// { " ", " ", " ", " ", " ", " ", " ", " " },
-	// { " ", " ", " ", " ", " ", " ", " ", " " },
-	// { " ", " ", " ", " ", " ", " ", " ", " " },
-	// { " ", " ", " ", " ", " ", " ", " ", " " },
-	// { "P", "P", "P", "P", "P", "P", "P", "P" },
-	// { "R", "K", "B", "Q", "A", "B", "K", "R" } };
-	// =======
 	static ChessBoard chessBoard = new ChessBoard();
-	// static String chessBoard[][] = { { "r", "k", "b", "q", "a", "b", "k", "r"
-	// },
-	// { "p", "p", "p", "p", "p", "p", "p", "p" },
-	// { " ", " ", " ", " ", " ", " ", " ", " " },
-	// { " ", " ", " ", " ", " ", " ", " ", " " },
-	// { " ", " ", " ", " ", " ", " ", " ", " " },
-	// { " ", " ", " ", " ", " ", " ", " ", " " },
-	// { "P", "P", "P", "P", "P", "P", "P", "P" },
-	// { "R", "K", "B", "Q", "A", "B", "K", "R" } };
-	// static int kingPositionC, kingPositionL;
-	// >>>>>>> c425c35a124b84a8f258e6521cd4261edeb3eaf2
 	static int humanAsWhite = -1;// 1=human as white, 0=human as black
 	static int globalDepth = 2;
 	static boolean kingCMoved = false, kingLMoved = false;
@@ -237,6 +215,7 @@ public class AlphaBetaChess {
 		return list;// x1,y1,x2,y2,captured piece
 	}
 
+	// TODO enpassant
 	public static String posibleP(int i) {
 		String list = "", oldPiece;
 		int r = i / 8, c = i % 8;
@@ -307,15 +286,15 @@ public class AlphaBetaChess {
 		}
 		try {// move two up
 			if (" ".equals(chessBoard.get(r - 1, c))
-					&& " ".equals(chessBoard.get(r - 2, c)) && i >= 48) {
-				oldPiece = chessBoard.get(r - 2, c);
+					&& " ".equals(chessBoard.get(r - 2, c)) && i >= 48
+					&& i < 56) {
 				chessBoard.set(r, c, " ");
 				chessBoard.set(r - 2, c, "P");
 				if (kingSafe()) {
-					list = list + r + c + (r - 2) + c + oldPiece;
+					list = list + r + c + (r - 2) + c + " ";
 				}
 				chessBoard.set(r, c, "P");
-				chessBoard.set(r - 2, c, oldPiece);
+				chessBoard.set(r - 2, c, " ");
 			}
 		} catch (Exception e) {
 		}
@@ -325,8 +304,8 @@ public class AlphaBetaChess {
 	public static String posibleR(int i) {
 		String list = "", oldPiece;
 		int r = i / 8, c = i % 8;
-		int temp = 1;
 		for (int j = -1; j <= 1; j += 2) {
+			int temp = 1;
 			try {
 				while (" ".equals(chessBoard.get(r, c + temp * j))) {
 					oldPiece = chessBoard.get(r, c + temp * j);
@@ -378,7 +357,6 @@ public class AlphaBetaChess {
 				}
 			} catch (Exception e) {
 			}
-			temp = 1;
 		}
 		return list;
 	}
@@ -428,9 +406,9 @@ public class AlphaBetaChess {
 	public static String posibleB(int i) {
 		String list = "", oldPiece;
 		int r = i / 8, c = i % 8;
-		int temp = 1;
 		for (int j = -1; j <= 1; j += 2) {
 			for (int k = -1; k <= 1; k += 2) {
+				int temp = 1;
 				try {
 					while (" ".equals(chessBoard
 							.get(r + temp * j, c + temp * k))) {
@@ -459,7 +437,6 @@ public class AlphaBetaChess {
 					}
 				} catch (Exception e) {
 				}
-				temp = 1;
 			}
 		}
 		return list;
@@ -468,10 +445,10 @@ public class AlphaBetaChess {
 	public static String posibleQ(int i) {
 		String list = "", oldPiece;
 		int r = i / 8, c = i % 8;
-		int temp = 1;
 		for (int j = -1; j <= 1; j++) {
 			for (int k = -1; k <= 1; k++) {
 				if (j != 0 || k != 0) {
+					int temp = 1;
 					try {
 						while (" ".equals(chessBoard.get(r + temp * j, c + temp
 								* k))) {
@@ -504,7 +481,6 @@ public class AlphaBetaChess {
 						}
 					} catch (Exception e) {
 					}
-					temp = 1;
 				}
 			}
 		}
@@ -512,7 +488,6 @@ public class AlphaBetaChess {
 	}
 
 	public static String possibleKing(int i) {
-		// System.out.println("kingCMoved " + kingCMoved);
 		String list = "", oldPiece;
 		int r = i / 8, c = i % 8;
 		for (int j = 0; j < 9; j++) {
@@ -540,7 +515,8 @@ public class AlphaBetaChess {
 		}
 
 		// Y is castling 7472. Z is castling 7476
-
+		// TODO without the explicit check for "A", opponent kings spawn out of
+		// nowhere. Must be bug in move rating
 		if (!kingCMoved) {
 			if (chessBoard.get(7, 4).equals("A") && !rook56Moved
 					&& (chessBoard.get(7, 0).equals("R"))
@@ -564,7 +540,6 @@ public class AlphaBetaChess {
 				uncastleRight();
 			}
 		}
-
 		return list;
 	}
 
@@ -636,52 +611,50 @@ public class AlphaBetaChess {
 
 	public static boolean squareSafe(int position) {
 		// bishop/queen
-		int temp = 1;
 		for (int i = -1; i <= 1; i += 2) {
 			for (int j = -1; j <= 1; j += 2) {
+				int temp = 1;
 				try {
-
-					while (" ".equals(chessBoard.get(kingPositionC() / 8 + temp
-							* i, kingPositionC() % 8 + temp * j))) {
+					while (" ".equals(chessBoard.get(position / 8 + temp * i,
+							position % 8 + temp * j))) {
 						temp++;
 					}
-					if ("b".equals(chessBoard.get(kingPositionC() / 8 + temp
-							* i, kingPositionC() % 8 + temp * j))
-							|| "q".equals(chessBoard.get(kingPositionC() / 8
-									+ temp * i, kingPositionC() % 8 + temp * j))) {
+					if ("b".equals(chessBoard.get(position / 8 + temp * i,
+							position % 8 + temp * j))
+							|| "q".equals(chessBoard.get(position / 8 + temp
+									* i, position % 8 + temp * j))) {
 						return false;
 					}
 				} catch (Exception e) {
 				}
-				temp = 1;
 			}
 		}
 		// rook/queen
 		for (int i = -1; i <= 1; i += 2) {
+			int temp = 1;
 			try {
-				while (" ".equals(chessBoard.get(kingPositionC() / 8,
-						kingPositionC() % 8 + temp * i))) {
+				while (" ".equals(chessBoard.get(position / 8, position % 8
+						+ temp * i))) {
 					temp++;
 				}
-				if ("r".equals(chessBoard.get(kingPositionC() / 8,
-						kingPositionC() % 8 + temp * i))
-						|| "q".equals(chessBoard.get(kingPositionC() / 8,
-								kingPositionC() % 8 + temp * i))) {
-
+				if ("r".equals(chessBoard.get(position / 8, position % 8 + temp
+						* i))
+						|| "q".equals(chessBoard.get(position / 8, position % 8
+								+ temp * i))) {
 					return false;
 				}
 			} catch (Exception e) {
 			}
 			temp = 1;
 			try {
-				while (" ".equals(chessBoard.get(
-						kingPositionC() / 8 + temp * i, kingPositionC() % 8))) {
+				while (" ".equals(chessBoard.get(position / 8 + temp * i,
+						position % 8))) {
 					temp++;
 				}
-				if ("r".equals(chessBoard.get(kingPositionC() / 8 + temp * i,
-						kingPositionC() % 8))
-						|| "q".equals(chessBoard.get(kingPositionC() / 8 + temp
-								* i, kingPositionC() % 8))) {
+				if ("r".equals(chessBoard.get(position / 8 + temp * i,
+						position % 8))
+						|| "q".equals(chessBoard.get(position / 8 + temp * i,
+								position % 8))) {
 					return false;
 				}
 			} catch (Exception e) {
@@ -692,16 +665,16 @@ public class AlphaBetaChess {
 		for (int i = -1; i <= 1; i += 2) {
 			for (int j = -1; j <= 1; j += 2) {
 				try {
-					if ("k".equals(chessBoard.get(kingPositionC() / 8 + i,
-							kingPositionC() % 8 + j * 2))) {
+					if ("k".equals(chessBoard.get(position / 8 + i, position
+							% 8 + j * 2))) {
 						return false;
 					}
 				} catch (Exception e) {
 				}
 				try {
 
-					if ("k".equals(chessBoard.get(kingPositionC() / 8 + i * 2,
-							kingPositionC() % 8 + j))) {
+					if ("k".equals(chessBoard.get(position / 8 + i * 2,
+							position % 8 + j))) {
 						return false;
 					}
 				} catch (Exception e) {
@@ -709,18 +682,17 @@ public class AlphaBetaChess {
 			}
 		}
 		// pawn
-		if (kingPositionC() >= 16) {
+		if (position >= 16) {
 			try {
-
-				if ("p".equals(chessBoard.get(kingPositionC() / 8 - 1,
-						kingPositionC() % 8 - 1))) {
+				if ("p".equals(chessBoard.get(position / 8 - 1,
+						position % 8 - 1))) {
 					return false;
 				}
 			} catch (Exception e) {
 			}
 			try {
-				if ("p".equals(chessBoard.get(kingPositionC() / 8 - 1,
-						kingPositionC() % 8 + 1))) {
+				if ("p".equals(chessBoard.get(position / 8 - 1,
+						position % 8 + 1))) {
 					return false;
 				}
 			} catch (Exception e) {
@@ -730,8 +702,8 @@ public class AlphaBetaChess {
 				for (int j = -1; j <= 1; j++) {
 					if (i != 0 || j != 0) {
 						try {
-							if ("a".equals(chessBoard.get(kingPositionC() / 8
-									+ i, kingPositionC() % 8 + j))) {
+							if ("a".equals(chessBoard.get(position / 8 + i,
+									position % 8 + j))) {
 								return false;
 							}
 						} catch (Exception e) {
