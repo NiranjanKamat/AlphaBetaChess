@@ -67,7 +67,7 @@ public class Rating {
 	public static int rateAttack() {
 		int counter = 0;
 		for (int i = 0; i < 64; i++) {
-			switch (AlphaBetaChess.chessBoard[i / 8][i % 8]) {
+			switch (AlphaBetaChess.chessBoard.get(i / 8, i % 8)) {
 				case "P": {
 
 					if (!AlphaBetaChess.squareSafe(i)) {
@@ -110,7 +110,7 @@ public class Rating {
 	public static int rateMaterial() {
 		int counter = 0, bishopCounter = 0;
 		for (int i = 0; i < 64; i++) {
-			switch (AlphaBetaChess.chessBoard[i / 8][i % 8]) {
+			switch (AlphaBetaChess.chessBoard.get(i / 8, i % 8)) {
 				case "P":
 					counter += 100;
 					break;
@@ -155,7 +155,7 @@ public class Rating {
 	public static int ratePositional(int material) {
 		int counter = 0;
 		for (int i = 0; i < 64; i++) {
-			switch (AlphaBetaChess.chessBoard[i / 8][i % 8]) {
+			switch (AlphaBetaChess.chessBoard.get(i / 8, i % 8)) {
 				case "P":
 					counter += pawnBoard[i / 8][i % 8];
 					break;
@@ -180,6 +180,7 @@ public class Rating {
 						counter += kingEndBoard[i / 8][i % 8];
 						counter += AlphaBetaChess.possibleKing(
 								AlphaBetaChess.kingPositionC()).length() * 30;
+
 					}
 					break;
 			}
