@@ -13,6 +13,14 @@ import org.junit.Test;
 public class AlphaBetaChessTest {
 
 	@Test
+	public void testPadding() {
+		String move = "7777P";
+		String reversedOpponent = String.format("%04d",
+				7777 - Integer.valueOf(move.substring(0, 4)));
+		assertEquals(reversedOpponent, "0000");
+	}
+
+	// @Test
 	public void possibleKTest() {
 		String chessBoard[][] = readState("misc/testData/KnightBugConfig.txt");
 		AlphaBetaChess.printBoard(chessBoard);

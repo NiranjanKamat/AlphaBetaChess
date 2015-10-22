@@ -1,6 +1,8 @@
 package niruChess;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -12,6 +14,10 @@ public class AlphaBetaChess {
 	static boolean kingCMoved = false, kingLMoved = false;
 	static boolean rook56Moved = false, rook7Moved = false;
 	static boolean rook63Moved = false, rook0Moved = false;
+
+	static List<String> humanMoves = new ArrayList<String>();
+	static List<String> computerMoves = new ArrayList<String>();
+	static List<String> opponentMoves = null;
 
 	static int kingPositionC() {
 		int kingPositionC = 0;
@@ -48,6 +54,7 @@ public class AlphaBetaChess {
 			String computerMove = alphaBeta(globalDepth, 1000000, -1000000, "",
 					0);
 			makeMove(computerMove);
+			computerMoves.add(computerMove);
 			long endTime = System.currentTimeMillis();
 			System.out.println("That took " + (endTime - startTime)
 					+ " milliseconds");
@@ -215,7 +222,6 @@ public class AlphaBetaChess {
 		return list;// x1,y1,x2,y2,captured piece
 	}
 
-	// TODO enpassant
 	public static String posibleP(int i) {
 		String list = "", oldPiece;
 		int r = i / 8, c = i % 8;
@@ -289,13 +295,16 @@ public class AlphaBetaChess {
 				chessBoard.set(r, c, " ");
 				chessBoard.set(r - 2, c, "P");
 				if (kingSafe()) {
-					list = list + r + c + (r - 2) + c + " ";
+					list = list + r + c + (r - 2) + c + " ";// double pawn move
 				}
 				chessBoard.set(r, c, "P");
 				chessBoard.set(r - 2, c, " ");
 			}
 		} catch (Exception e) {
 		}
+		// enpassant
+		// L is left enpassant
+		// R is right enpassant
 		return list;
 	}
 

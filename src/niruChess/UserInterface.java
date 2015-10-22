@@ -79,6 +79,14 @@ public class UserInterface extends JPanel implements MouseListener,
 					+ newRow);
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				String dragMove;
+				// if ((oldColumn == newColumn)
+				// && (oldRow == 6)
+				// && (newRow == 4)
+				// && ("P".equals(AlphaBetaChess.chessBoard.get(oldRow,
+				// oldColumn)))) {
+				// dragMove = "" + oldRow + oldColumn + newRow + newColumn
+				// + "D";
+				// } else
 				if ((oldColumn == 4)
 						&& (newColumn == 6)
 						&& (oldRow == 7)
@@ -107,24 +115,43 @@ public class UserInterface extends JPanel implements MouseListener,
 							+ AlphaBetaChess.chessBoard.get(newRow, newColumn);
 				}
 				String userPosibilities = AlphaBetaChess.posibleMoves();
-				// System.out.println("dragMove " + dragMove);
+				checkEnd(userPosibilities);
 				if (userPosibilities.contains(dragMove)) {
 					// if valid move
+					AlphaBetaChess.humanMoves.add(dragMove);
 					AlphaBetaChess.makeMove(dragMove);
 					postMove(dragMove);
+					AlphaBetaChess.opponentMoves = AlphaBetaChess.humanMoves;
+
+					String computerPossibilities = AlphaBetaChess
+							.posibleMoves();
+					checkEnd(computerPossibilities);
 
 					String computerMove = AlphaBetaChess.alphaBeta(
 							AlphaBetaChess.globalDepth, 1000000, -1000000, "",
 							0).substring(0, 5);
 					System.out.println("computerMove " + computerMove);
+					AlphaBetaChess.computerMoves.add(computerMove);
 					AlphaBetaChess.makeMove(computerMove);
 					postMove(computerMove);
+					AlphaBetaChess.opponentMoves = AlphaBetaChess.computerMoves;
 					repaint();
 				} else {
 					System.out.println(dragMove + " is not allowed");
 					System.out.println("userPosibilities " + userPosibilities);
 				}
 			}
+		}
+	}
+
+	private void checkEnd(String userPossibilities) {
+		if (userPossibilities.length() == 0) {
+			if (AlphaBetaChess.kingSafe()) {
+				System.out.println("Stalemate");
+			} else {
+				System.out.println("Checkmate");
+			}
+			// System.exit(0);
 		}
 	}
 
