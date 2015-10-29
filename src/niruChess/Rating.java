@@ -52,13 +52,13 @@ public class Rating {
 		int counter = 0, material = rateMaterial();
 		counter += rateAttack();
 		counter += material;
-		counter += rateMoveablitly(list, depth, material);
+		counter += rateMoveablitly(list, depth);
 		counter += ratePositional(material);
 		AlphaBetaChess.flipBoard();
 		material = rateMaterial();
 		counter -= rateAttack();
 		counter -= material;
-		counter -= rateMoveablitly(list, depth, material);
+		counter -= rateMoveablitly(list, depth);
 		counter -= ratePositional(material);
 		AlphaBetaChess.flipBoard();
 		return (counter + depth * 50);
@@ -138,18 +138,17 @@ public class Rating {
 		return counter;
 	}
 
-	public static int rateMoveablitly(int listLength, int depth, int material) {
+	public static int rateMoveablitly(int listLength, int depth) {
 		int counter = 0;
 		counter += listLength;// 5 pointer per valid move
 		if (listLength == 0) {// current side is in checkmate or stalemate
 			if (!AlphaBetaChess.kingSafe()) {// if checkmate
-				counter += -200000 * depth;
+				counter -= 200000 * depth;
 			} else {// if stalemate
-				counter += -150000 * depth;
+				counter -= 150000 * depth;
 			}
 		}
-		// TODO Don't know why return 0
-		return 0;
+		return counter;
 	}
 
 	public static int ratePositional(int material) {

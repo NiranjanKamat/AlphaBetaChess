@@ -17,6 +17,9 @@ public class UserInterface extends JPanel implements MouseListener,
 	static int newColumn, newRow;
 	static int squareSize = 60;
 	static boolean humanAsWhite = true;
+	static boolean mouseClicked = false;
+
+	static long lastClickTime = System.currentTimeMillis();
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -58,100 +61,82 @@ public class UserInterface extends JPanel implements MouseListener,
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (withinBoard(e)) {
-			oldColumn = e.getX() / squareSize;
-			oldRow = e.getY() / squareSize;
-		}
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (withinBoard(e)) {
-			// if inside the board
-			newColumn = e.getX() / squareSize;
-			newRow = e.getY() / squareSize;
-			System.out.println(oldColumn + "" + newColumn + "" + oldRow + ""
-					+ newRow);
-			if (e.getButton() == MouseEvent.BUTTON1) {
-				String dragMove;
-				// if ((oldColumn == newColumn)
-				// && (oldRow == 6)
-				// && (newRow == 4)
-				// && ("P".equals(AlphaBetaChess.chessBoard.get(oldRow,
-				// oldColumn)))) {
-				// dragMove = "" + oldRow + oldColumn + newRow + newColumn
-				// + "D";
-				// } else
-				if ((oldColumn == 4)
-						&& (newColumn == 6)
-						&& (oldRow == 7)
-						&& (newRow == 7)
-						&& ("A".equals(AlphaBetaChess.chessBoard.get(oldRow,
-								oldColumn)))) {
-					dragMove = "7476Z";
-				} else if ((oldColumn == 4)
-						&& (newColumn == 2)
-						&& (oldRow == 7)
-						&& (newRow == 7)
-						&& ("A".equals(AlphaBetaChess.chessBoard.get(oldRow,
-								oldColumn)))) {
-					dragMove = "7472Y";
-				} else if (newRow == 0
-						&& oldRow == 1
-						&& "P".equals(AlphaBetaChess.chessBoard.get(oldRow,
-								oldColumn))) {
-					// pawn promotion
-					dragMove = "" + oldColumn + newColumn
-							+ AlphaBetaChess.chessBoard.get(newRow, newColumn)
-							+ pawnPromotion() + "P";
-				} else {
-					// regular move
-					dragMove = "" + oldRow + oldColumn + newRow + newColumn
-							+ AlphaBetaChess.chessBoard.get(newRow, newColumn);
-				}
-				String userPosibilities = AlphaBetaChess.posibleMoves();
-				checkEnd(userPosibilities);
-				if (userPosibilities.contains(dragMove)) {
-					// if valid move
-					AlphaBetaChess.humanMoves.add(dragMove);
-					AlphaBetaChess.makeMove(dragMove);
-					postMove(dragMove);
-					AlphaBetaChess.opponentMoves = AlphaBetaChess.humanMoves;
+	}
 
-					String computerPossibilities = AlphaBetaChess
-							.posibleMoves();
-					checkEnd(computerPossibilities);
+	void humanAndComputerMove() {
+		String dragMove = dragMove();
+		String userPosibilities = AlphaBetaChess.posibleMoves();
+		if (checkEnd(userPosibilities)) {
+			System.out.println("returning");
+			return;
+		}
+		if (userPosibilities.contains(dragMove)) {
+			// if valid move
+			AlphaBetaChess.humanMoves.add(dragMove);
+			AlphaBetaChess.makeMove(dragMove);
+			postMove(dragMove);
+			AlphaBetaChess.opponentMoves = AlphaBetaChess.humanMoves;
 
-					String computerMove = AlphaBetaChess.alphaBeta(
-							AlphaBetaChess.globalDepth, 1000000, -1000000, "",
-							0).substring(0, 5);
-					System.out.println("computerMove " + computerMove);
-					AlphaBetaChess.computerMoves.add(computerMove);
-					AlphaBetaChess.makeMove(computerMove);
-					postMove(computerMove);
-					AlphaBetaChess.opponentMoves = AlphaBetaChess.computerMoves;
-					repaint();
-				} else {
-					System.out.println(dragMove + " is not allowed");
-					System.out.println("userPosibilities " + userPosibilities);
-				}
-			}
+			String computerPossibilities = AlphaBetaChess.posibleMoves();
+			checkEnd(computerPossibilities);
+
+			String computerMove = AlphaBetaChess.alphaBeta(
+					AlphaBetaChess.globalDepth, 1000000, -1000000, "", 0)
+					.substring(0, 5);
+			System.out.println("computerMove " + computerMove);
+			AlphaBetaChess.computerMoves.add(computerMove);
+			AlphaBetaChess.makeMove(computerMove);
+			postMove(computerMove);
+			AlphaBetaChess.opponentMoves = AlphaBetaChess.computerMoves;
+			repaint();
+		} else {
+			System.out.println(dragMove + " is not allowed");
+			System.out.println("userPosibilities " + userPosibilities);
 		}
 	}
 
-	private void checkEnd(String userPossibilities) {
+	String dragMove() {
+		String dragMove;
+		if ((oldColumn == 4)
+				&& (newColumn == 6)
+				&& (oldRow == 7)
+				&& (newRow == 7)
+				&& ("A".equals(AlphaBetaChess.chessBoard.get(oldRow, oldColumn)))) {
+			dragMove = "7476Z";
+		} else if ((oldColumn == 4)
+				&& (newColumn == 2)
+				&& (oldRow == 7)
+				&& (newRow == 7)
+				&& ("A".equals(AlphaBetaChess.chessBoard.get(oldRow, oldColumn)))) {
+			dragMove = "7472Y";
+		} else if (newRow == 0 && oldRow == 1
+				&& "P".equals(AlphaBetaChess.chessBoard.get(oldRow, oldColumn))) {
+			// pawn promotion
+			dragMove = "" + oldColumn + newColumn
+					+ AlphaBetaChess.chessBoard.get(newRow, newColumn)
+					+ pawnPromotion() + "P";
+		} else {
+			// regular move
+			dragMove = "" + oldRow + oldColumn + newRow + newColumn
+					+ AlphaBetaChess.chessBoard.get(newRow, newColumn);
+		}
+		return dragMove;
+	}
+
+	private boolean checkEnd(String userPossibilities) {
 		if (userPossibilities.length() == 0) {
 			if (AlphaBetaChess.kingSafe()) {
 				System.out.println("Stalemate");
 			} else {
 				System.out.println("Checkmate");
 			}
-			// System.exit(0);
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -191,6 +176,40 @@ public class UserInterface extends JPanel implements MouseListener,
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		if (isDoubleClick()) {
+			return;
+		}
+		if (withinBoard(e)) {
+			if (!mouseClicked) {
+				mouseClicked = true;
+				oldColumn = e.getX() / squareSize;
+				oldRow = e.getY() / squareSize;
+			} else {
+				mouseClicked = false;
+				newColumn = e.getX() / squareSize;
+				newRow = e.getY() / squareSize;
+				if ((oldColumn == newColumn) && (oldRow == newRow)) {
+					return;
+				} else {
+					humanAndComputerMove();
+				}
+			}
+		}
+	}
+
+	// After the first click, subsequent clicks result in mouseClicked
+	// getting called twice
+	boolean isDoubleClick() {
+		if (System.currentTimeMillis() - lastClickTime < 100) {
+			return true;
+		} else {
+			lastClickTime = System.currentTimeMillis();
+			return false;
+		}
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
 	}
 
 	@Override
