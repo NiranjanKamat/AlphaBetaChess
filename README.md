@@ -4,3 +4,6 @@ It has basic GUI, alpha beta pruning and static evaluation. Original author says
 It contains future efforts by me to add more features and chess rules, to improve its rating and general refactoring.
 
 To try, run any of the non test classes.
+
+Click on piece and then its destination to make a move.
+

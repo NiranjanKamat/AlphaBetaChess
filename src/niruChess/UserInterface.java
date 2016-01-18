@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -13,6 +15,8 @@ import javax.swing.JPanel;
 
 public class UserInterface extends JPanel implements MouseListener,
 		MouseMotionListener {
+
+	private static final long serialVersionUID = 1L;
 	static int oldColumn, oldRow;
 	static int newColumn, newRow;
 	static int squareSize = 60;
@@ -28,6 +32,7 @@ public class UserInterface extends JPanel implements MouseListener,
 		this.addMouseMotionListener(this);
 		paintSquares(g);
 		paintPieces(g);
+		paintRowColNumbers(g);
 	}
 
 	void paintSquares(Graphics g) {
@@ -79,12 +84,11 @@ public class UserInterface extends JPanel implements MouseListener,
 			System.out.println("returning");
 			return;
 		}
-		if (userPosibilities.contains(dragMove)) {
-			// if valid move
-			AlphaBetaChess.humanMoves.add(dragMove);
+		if (userPosibilities.contains(dragMove)) {// if valid move
+			// AlphaBetaChess.humanMoves.add(dragMove);
 			AlphaBetaChess.makeMove(dragMove);
 			postMove(dragMove);
-			AlphaBetaChess.opponentMoves = AlphaBetaChess.humanMoves;
+			// AlphaBetaChess.opponentMoves = AlphaBetaChess.humanMoves;
 
 			String computerPossibilities = AlphaBetaChess.posibleMoves();
 			checkEnd(computerPossibilities);
@@ -93,10 +97,10 @@ public class UserInterface extends JPanel implements MouseListener,
 					AlphaBetaChess.globalDepth, 1000000, -1000000, "", 0)
 					.substring(0, 5);
 			System.out.println("computerMove " + computerMove);
-			AlphaBetaChess.computerMoves.add(computerMove);
+			// AlphaBetaChess.computerMoves.add(computerMove);
 			AlphaBetaChess.makeMove(computerMove);
 			postMove(computerMove);
-			AlphaBetaChess.opponentMoves = AlphaBetaChess.computerMoves;
+			// AlphaBetaChess.opponentMoves = AlphaBetaChess.computerMoves;
 			repaint();
 		} else {
 			System.out.println(dragMove + " is not allowed");
@@ -294,6 +298,68 @@ public class UserInterface extends JPanel implements MouseListener,
 						(k + 1) * 64, this);
 			}
 		}
+	}
+
+	private void paintRowColNumbers(Graphics g) {
+		Image numbers = new ImageIcon("numbers.jpeg").getImage();
+		for (int i = 0; i < 8; i++) {
+			List<Integer> jk = imageIndex(i);
+			int j = jk.get(0);
+			int k = jk.get(1);
+			g.drawImage(numbers, 480 + 0 * squareSize, i * squareSize,
+					480 + 1 * squareSize, (i + 1) * squareSize, j * 62, k * 85,
+					(j + 1) * 62, (k + 1) * 85, this);
+		}
+		for (int i = 0; i < 8; i++) {
+			List<Integer> jk = imageIndex(i);
+			int j = jk.get(0);
+			int k = jk.get(1);
+			g.drawImage(numbers, i * squareSize, 480 + 0 * squareSize, (i + 1)
+					* squareSize, 480 + (1) * squareSize, j * 62, k * 85,
+					(j + 1) * 62, (k + 1) * 85, this);
+		}
+	}
+
+	private List<Integer> imageIndex(int i) {
+		int j = -1, k = -1;
+		switch (i) {
+			case 0:
+				j = 0;
+				k = 0;
+				break;
+			case 1:
+				j = 1;
+				k = 0;
+				break;
+			case 2:
+				j = 2;
+				k = 0;
+				break;
+			case 3:
+				j = 3;
+				k = 0;
+				break;
+			case 4:
+				j = 4;
+				k = 0;
+				break;
+			case 5:
+				j = 0;
+				k = 1;
+				break;
+			case 6:
+				j = 1;
+				k = 1;
+				break;
+			case 7:
+				j = 2;
+				k = 1;
+				break;
+		}
+		List<Integer> jk = new ArrayList<Integer>();
+		jk.add(j);
+		jk.add(k);
+		return jk;
 	}
 
 	static String pawnPromotion() {

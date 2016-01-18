@@ -1,8 +1,6 @@
 package niruChess;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -15,9 +13,9 @@ public class AlphaBetaChess {
 	static boolean rook56Moved = false, rook7Moved = false;
 	static boolean rook63Moved = false, rook0Moved = false;
 
-	static List<String> humanMoves = new ArrayList<String>();
-	static List<String> computerMoves = new ArrayList<String>();
-	static List<String> opponentMoves = null;
+	// static List<String> humanMoves = new ArrayList<String>();
+	// static List<String> computerMoves = new ArrayList<String>();
+	// static List<String> opponentMoves = null;
 
 	static int kingPositionC() {
 		int kingPositionC = 0;
@@ -41,7 +39,7 @@ public class AlphaBetaChess {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		UserInterface ui = new UserInterface();
 		f.add(ui);
-		f.setSize(600, 500);
+		f.setSize(600, 600);
 		f.setVisible(true);
 
 		Object[] option = { "Computer", "Human" };
@@ -54,7 +52,7 @@ public class AlphaBetaChess {
 			String computerMove = alphaBeta(globalDepth, 1000000, -1000000, "",
 					0);
 			makeMove(computerMove);
-			computerMoves.add(computerMove);
+			// computerMoves.add(computerMove);
 			long endTime = System.currentTimeMillis();
 			System.out.println("That took " + (endTime - startTime)
 					+ " milliseconds");
