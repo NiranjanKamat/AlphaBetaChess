@@ -50,13 +50,13 @@ public class Rating {
 
 	public static int rating(int list, int depth) {
 		int counter = 0, material = rateMaterial();
-		counter += rateAttack();
+		counter += rateUnderAttack();
 		counter += material;
 		counter += rateMoveablitly(list, depth);
 		counter += ratePositional(material);
 		AlphaBetaChess.flipBoard();
 		material = rateMaterial();
-		counter -= rateAttack();
+		counter -= rateUnderAttack();
 		counter -= material;
 		counter -= rateMoveablitly(list, depth);
 		counter -= ratePositional(material);
@@ -64,7 +64,7 @@ public class Rating {
 		return (counter + depth * 50);
 	}
 
-	public static int rateAttack() {
+	public static int rateUnderAttack() {
 		int counter = 0;
 		for (int i = 0; i < 64; i++) {
 			switch (AlphaBetaChess.chessBoard.get(i / 8, i % 8)) {

@@ -27,8 +27,7 @@ public class UserInterface extends JPanel implements MouseListener,
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		paintSquares(g);
-		Image chessPiecesImage = new ImageIcon("ChessPieces.png").getImage();
-		paintPieces(g, chessPiecesImage);
+		paintPieces(g);
 	}
 
 	void paintSquares(Graphics g) {
@@ -48,6 +47,12 @@ public class UserInterface extends JPanel implements MouseListener,
 						squareSize);
 				currentColor = swapColor(white, black, currentColor);
 			}
+		}
+		if (mouseClicked) {// highlight clicked square
+			Color clicked = new Color(200, 125, 65);
+			g.setColor(clicked);
+			g.fillRect(oldColumn * squareSize, oldRow * squareSize, squareSize,
+					squareSize);
 		}
 	}
 
@@ -184,6 +189,7 @@ public class UserInterface extends JPanel implements MouseListener,
 				mouseClicked = true;
 				oldColumn = e.getX() / squareSize;
 				oldRow = e.getY() / squareSize;
+				repaint();
 			} else {
 				mouseClicked = false;
 				newColumn = e.getX() / squareSize;
@@ -224,7 +230,8 @@ public class UserInterface extends JPanel implements MouseListener,
 	public void mouseExited(MouseEvent e) {
 	}
 
-	void paintPieces(Graphics g, Image chessPiecesImage) {
+	void paintPieces(Graphics g) {
+		Image chessPiecesImage = new ImageIcon("ChessPieces.png").getImage();
 		for (int i = 0; i < 64; i++) {
 			int j = -1, k = -1;
 			switch (AlphaBetaChess.chessBoard.get(i / 8, i % 8)) {
