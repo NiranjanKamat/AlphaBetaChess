@@ -54,6 +54,20 @@ public class UserInterface extends JPanel implements MouseListener,
 		if (mouseClicked) {// highlight clicked square
 			Color clicked = new Color(200, 125, 65);
 			paintSquare(oldColumn, oldRow, clicked, g);
+			System.out.println("oldColumn " + oldColumn + " oldRow " + oldRow);
+			String possibleMoves = AlphaBetaChess.posibleMoves();
+			System.out.println("possibleMoves " + possibleMoves);
+			for (int moveIndex = 0; moveIndex < possibleMoves.length() / 5; moveIndex++) {
+				int moveStart = moveIndex * 5;
+				if ((Character.getNumericValue(possibleMoves.charAt(moveStart)) == oldRow)
+						&& (Character.getNumericValue(possibleMoves
+								.charAt(moveStart + 1)) == oldColumn)) {
+					paintSquare(Character.getNumericValue(possibleMoves
+							.charAt(moveStart + 3)),
+							Character.getNumericValue(possibleMoves
+									.charAt(moveStart + 2)), clicked, g);
+				}
+			}
 		}
 	}
 
