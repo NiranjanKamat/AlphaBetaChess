@@ -47,18 +47,20 @@ public class UserInterface extends JPanel implements MouseListener,
 		for (int i = 0; i < 8; i++) {
 			currentColor = swapColor(white, black, currentColor);
 			for (int j = 0; j < 8; j++) {
-				g.setColor(currentColor);
-				g.fillRect(i * squareSize, j * squareSize, squareSize,
-						squareSize);
+				paintSquare(i, j, currentColor, g);
 				currentColor = swapColor(white, black, currentColor);
 			}
 		}
 		if (mouseClicked) {// highlight clicked square
 			Color clicked = new Color(200, 125, 65);
-			g.setColor(clicked);
-			g.fillRect(oldColumn * squareSize, oldRow * squareSize, squareSize,
-					squareSize);
+			paintSquare(oldColumn, oldRow, clicked, g);
 		}
+	}
+
+	private void paintSquare(int column, int row, Color color, Graphics g) {
+		g.setColor(color);
+		g.fillRect(column * squareSize, row * squareSize, squareSize,
+				squareSize);
 	}
 
 	private Color swapColor(Color white, Color black, Color currentColor) {
