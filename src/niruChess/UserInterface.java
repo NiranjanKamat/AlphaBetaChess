@@ -51,12 +51,12 @@ public class UserInterface extends JPanel implements MouseListener,
 				currentColor = swapColor(white, black, currentColor);
 			}
 		}
-		if (mouseClicked) {// highlight clicked square
+		if (mouseClicked) {
+			// highlight clicked square
 			Color clicked = new Color(200, 125, 65);
 			paintSquare(oldColumn, oldRow, clicked, g);
-			System.out.println("oldColumn " + oldColumn + " oldRow " + oldRow);
+			// highlight possible squares
 			String possibleMoves = AlphaBetaChess.posibleMoves();
-			System.out.println("possibleMoves " + possibleMoves);
 			for (int moveIndex = 0; moveIndex < possibleMoves.length() / 5; moveIndex++) {
 				int moveStart = moveIndex * 5;
 				if ((Character.getNumericValue(possibleMoves.charAt(moveStart)) == oldRow)
@@ -94,16 +94,16 @@ public class UserInterface extends JPanel implements MouseListener,
 	}
 
 	void humanAndComputerMove() {
-		String dragMove = dragMove();
+		String userMove = userMove();
 		String userPosibilities = AlphaBetaChess.posibleMoves();
 		if (checkEnd(userPosibilities)) {
 			System.out.println("returning");
 			return;
 		}
-		if (userPosibilities.contains(dragMove)) {// if valid move
+		if (userPosibilities.contains(userMove)) {// if valid move
 			// AlphaBetaChess.humanMoves.add(dragMove);
-			AlphaBetaChess.makeMove(dragMove);
-			postMove(dragMove);
+			AlphaBetaChess.makeMove(userMove);
+			postMove(userMove);
 			// AlphaBetaChess.opponentMoves = AlphaBetaChess.humanMoves;
 
 			String computerPossibilities = AlphaBetaChess.posibleMoves();
@@ -119,12 +119,12 @@ public class UserInterface extends JPanel implements MouseListener,
 			// AlphaBetaChess.opponentMoves = AlphaBetaChess.computerMoves;
 			repaint();
 		} else {
-			System.out.println(dragMove + " is not allowed");
+			System.out.println(userMove + " is not allowed");
 			System.out.println("userPosibilities " + userPosibilities);
 		}
 	}
 
-	String dragMove() {
+	String userMove() {
 		String dragMove;
 		if ((oldColumn == 4)
 				&& (newColumn == 6)
@@ -155,10 +155,13 @@ public class UserInterface extends JPanel implements MouseListener,
 	private boolean checkEnd(String userPossibilities) {
 		if (userPossibilities.length() == 0) {
 			if (AlphaBetaChess.kingSafe()) {
+				JOptionPane.showMessageDialog(null, "Stalemate");
 				System.out.println("Stalemate");
 			} else {
+				JOptionPane.showMessageDialog(null, "Checkmate");
 				System.out.println("Checkmate");
 			}
+			System.exit(0);
 			return true;
 		} else {
 			return false;

@@ -6,7 +6,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class AlphaBetaChess {
-	static ChessBoard chessBoard = new ChessBoard();
+
+	static ChessBoard chessBoard = ChessBoard.onlyKingComputerBoard();
+	// static ChessBoard chessBoard = new ChessBoard();
+
 	static int humanAsWhite = -1;// 1=human as white, 0=human as black
 	static int globalDepth = 2;
 	static boolean kingCMoved = false, kingLMoved = false;

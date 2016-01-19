@@ -1,7 +1,25 @@
 package niruChess;
 
 public class ChessBoard {
-	private static String chessBoard[][] = {
+	public static String[][] chessBoard = null;
+
+	ChessBoard() {
+		chessBoard = defaultChessBoard;
+	}
+
+	ChessBoard(String[][] chessBoard) {
+		ChessBoard.chessBoard = chessBoard;
+	}
+
+	public static ChessBoard onlyKingComputerBoard() {
+		return new ChessBoard(ChessBoard.onlyKingComputerBoard);
+	}
+
+	public static ChessBoard onlyKingHumanBoard() {
+		return new ChessBoard(ChessBoard.onlyKingHumanBoard);
+	}
+
+	static String[][] defaultChessBoard = {
 			{ "r", "k", "b", "q", "a", "b", "k", "r" },
 			{ "p", "p", "p", "p", "p", "p", "p", "p" },
 			{ " ", " ", " ", " ", " ", " ", " ", " " },
@@ -10,6 +28,26 @@ public class ChessBoard {
 			{ " ", " ", " ", " ", " ", " ", " ", " " },
 			{ "P", "P", "P", "P", "P", "P", "P", "P" },
 			{ "R", "K", "B", "Q", "A", "B", "K", "R" } };
+
+	static String[][] onlyKingComputerBoard = new String[][] {
+			{ " ", " ", " ", " ", "a", " ", " ", " " },
+			{ " ", " ", " ", " ", " ", " ", " ", " " },
+			{ " ", " ", " ", " ", " ", " ", " ", " " },
+			{ " ", " ", " ", " ", " ", " ", " ", " " },
+			{ " ", " ", " ", " ", " ", " ", " ", " " },
+			{ " ", " ", " ", " ", " ", " ", " ", " " },
+			{ "P", "P", "P", "P", "P", "P", "P", "P" },
+			{ "R", "K", "B", "Q", "A", "B", "K", "R" } };
+
+	static String[][] onlyKingHumanBoard = new String[][] {
+			{ "r", "k", "b", "q", "a", "b", "k", "r" },
+			{ "p", "p", "p", "p", "p", "p", "p", "p" },
+			{ " ", " ", " ", " ", " ", " ", " ", " " },
+			{ " ", " ", " ", " ", " ", " ", " ", " " },
+			{ " ", " ", " ", " ", " ", " ", " ", " " },
+			{ " ", " ", " ", " ", " ", " ", " ", " " },
+			{ " ", " ", " ", " ", " ", " ", " ", " " },
+			{ " ", " ", " ", " ", "A", " ", " ", " " } };
 
 	public String get(int row, int column) {
 		return chessBoard[row][column];
