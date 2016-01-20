@@ -53,7 +53,17 @@ public class ChessBoard {
 		return chessBoard[row][column];
 	}
 
+	public String get(char row, char column) {
+		return get(Character.getNumericValue(row),
+				Character.getNumericValue(column));
+	}
+
 	public void set(int row, int column, String piece) {
 		chessBoard[row][column] = piece;
+	}
+
+	public void set(char row, char column, String piece) {
+		set(Character.getNumericValue(row), Character.getNumericValue(column),
+				piece);
 	}
 }

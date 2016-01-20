@@ -1,14 +1,16 @@
 package niruChess;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class AlphaBetaChess {
 
-	static ChessBoard chessBoard = ChessBoard.onlyKingComputerBoard();
-	// static ChessBoard chessBoard = new ChessBoard();
+	// static ChessBoard chessBoard = ChessBoard.onlyKingComputerBoard();
+	static ChessBoard chessBoard = new ChessBoard();
 
 	static int humanAsWhite = -1;// 1=human as white, 0=human as black
 	static int globalDepth = 2;
@@ -16,9 +18,9 @@ public class AlphaBetaChess {
 	static boolean rook56Moved = false, rook7Moved = false;
 	static boolean rook63Moved = false, rook0Moved = false;
 
-	// static List<String> humanMoves = new ArrayList<String>();
-	// static List<String> computerMoves = new ArrayList<String>();
-	// static List<String> opponentMoves = null;
+	static List<String> humanMoves = new ArrayList<String>();
+	static List<String> computerMoves = new ArrayList<String>();
+	static List<String> opponentMoves = null;
 
 	static int kingPositionC() {
 		int kingPositionC = 0;
@@ -156,7 +158,15 @@ public class AlphaBetaChess {
 	}
 
 	public static void makeMove(String move) {
-		if (move.charAt(4) == 'Z') {
+		if (move.charAt(4) == 'E') {// enpassant left
+			System.out.println("E move " + move);
+			chessBoard.set(move.charAt(0), move.charAt(1), " ");
+			chessBoard.set(Character.getNumericValue(move.charAt(0)),
+					Character.getNumericValue(move.charAt(1)) - 1, " ");
+			chessBoard.set(move.charAt(2), move.charAt(3), "P");
+		} else if (move.charAt(4) == 'N') {// enpassant right
+
+		} else if (move.charAt(4) == 'Z') {
 			castleRight();
 		} else if (move.charAt(4) == 'Y') {
 			castleLeft();
@@ -176,7 +186,14 @@ public class AlphaBetaChess {
 	}
 
 	public static void undoMove(String move) {
-		if (move.charAt(4) == 'Z') {
+		if (move.charAt(4) == 'E') {// enpassant left
+			chessBoard.set(move.charAt(0), move.charAt(1), "P");
+			chessBoard.set(Character.getNumericValue(move.charAt(0)),
+					Character.getNumericValue(move.charAt(1)) - 1, "p");
+			chessBoard.set(move.charAt(2), move.charAt(3), " ");
+		} else if (move.charAt(4) == 'N') {// enpassant right
+
+		} else if (move.charAt(4) == 'Z') {
 			uncastleRight();
 		} else if (move.charAt(4) == 'Y') {
 			uncastleLeft();
@@ -303,9 +320,24 @@ public class AlphaBetaChess {
 			}
 		} catch (Exception e) {
 		}
+		try {// left en passant simple: not really: trial
+			if ("p".equals(chessBoard.get(r, c - 1))) {// Add history 2 moves
+				chessBoard.set(r - 1, c - 1, "P");
+				chessBoard.set(r, c, " ");
+				chessBoard.set(r, c - 1, " ");
+				if (kingSafe()) {
+					list = list + r + c + (r - 1) + (c - 1) + "E";// double pawn
+																  // move
+				}
+				chessBoard.set(r - 1, c - 1, " ");
+				chessBoard.set(r, c, "P");
+				chessBoard.set(r, c - 1, "p");
+			}
+		} catch (Exception e) {
+		}
 		// enpassant
-		// L is left enpassant
-		// R is right enpassant
+		// E is left enpassant
+		// N is right enpassant
 		return list;
 	}
 
