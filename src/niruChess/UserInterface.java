@@ -132,6 +132,12 @@ public class UserInterface extends JPanel implements MouseListener,
 				&& (AlphaBetaChess.chessBoard.get(oldRow, oldColumn - 1)
 						.equals("p"))) {
 			dragMove = "" + oldRow + oldColumn + newRow + newColumn + "E";
+		} else if ((AlphaBetaChess.chessBoard.get(newRow, newColumn) == " ")
+				&& (oldRow - newRow == 1)
+				&& (oldColumn - newColumn == -1)
+				&& (AlphaBetaChess.chessBoard.get(oldRow, oldColumn + 1)
+						.equals("p"))) {
+			dragMove = "" + oldRow + oldColumn + newRow + newColumn + "N";
 		} else if ((oldColumn == 4)
 				&& (newColumn == 6)
 				&& (oldRow == 7)

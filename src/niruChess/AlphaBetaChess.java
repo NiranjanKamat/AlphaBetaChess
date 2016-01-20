@@ -159,13 +159,9 @@ public class AlphaBetaChess {
 
 	public static void makeMove(String move) {
 		if (move.charAt(4) == 'E') {// enpassant left
-			System.out.println("E move " + move);
-			chessBoard.set(move.charAt(0), move.charAt(1), " ");
-			chessBoard.set(Character.getNumericValue(move.charAt(0)),
-					Character.getNumericValue(move.charAt(1)) - 1, " ");
-			chessBoard.set(move.charAt(2), move.charAt(3), "P");
+			enPassantLeft(move);
 		} else if (move.charAt(4) == 'N') {// enpassant right
-
+			enPassantRight(move);
 		} else if (move.charAt(4) == 'Z') {
 			castleRight();
 		} else if (move.charAt(4) == 'Y') {
@@ -185,14 +181,25 @@ public class AlphaBetaChess {
 		}
 	}
 
+	static void enPassantRight(String move) {
+		chessBoard.set(move.charAt(0), move.charAt(1), " ");
+		chessBoard.set(Character.getNumericValue(move.charAt(0)),
+				Character.getNumericValue(move.charAt(1)) + 1, " ");
+		chessBoard.set(move.charAt(2), move.charAt(3), "P");
+	}
+
+	static void enPassantLeft(String move) {
+		chessBoard.set(move.charAt(0), move.charAt(1), " ");
+		chessBoard.set(Character.getNumericValue(move.charAt(0)),
+				Character.getNumericValue(move.charAt(1)) - 1, " ");
+		chessBoard.set(move.charAt(2), move.charAt(3), "P");
+	}
+
 	public static void undoMove(String move) {
 		if (move.charAt(4) == 'E') {// enpassant left
-			chessBoard.set(move.charAt(0), move.charAt(1), "P");
-			chessBoard.set(Character.getNumericValue(move.charAt(0)),
-					Character.getNumericValue(move.charAt(1)) - 1, "p");
-			chessBoard.set(move.charAt(2), move.charAt(3), " ");
+			unEnpassantLeft(move);
 		} else if (move.charAt(4) == 'N') {// enpassant right
-
+			unEnpassantRight(move);
 		} else if (move.charAt(4) == 'Z') {
 			uncastleRight();
 		} else if (move.charAt(4) == 'Y') {
@@ -211,6 +218,20 @@ public class AlphaBetaChess {
 					Character.getNumericValue(move.charAt(3)),
 					String.valueOf(move.charAt(4)));
 		}
+	}
+
+	static void unEnpassantRight(String move) {
+		chessBoard.set(move.charAt(0), move.charAt(1), "P");
+		chessBoard.set(Character.getNumericValue(move.charAt(0)),
+				Character.getNumericValue(move.charAt(1)) + 1, "p");
+		chessBoard.set(move.charAt(2), move.charAt(3), " ");
+	}
+
+	static void unEnpassantLeft(String move) {
+		chessBoard.set(move.charAt(0), move.charAt(1), "P");
+		chessBoard.set(Character.getNumericValue(move.charAt(0)),
+				Character.getNumericValue(move.charAt(1)) - 1, "p");
+		chessBoard.set(move.charAt(2), move.charAt(3), " ");
 	}
 
 	public static String posibleMoves() {
@@ -327,8 +348,7 @@ public class AlphaBetaChess {
 				chessBoard.set(r, c, " ");
 				chessBoard.set(r, c - 1, " ");
 				if (kingSafe()) {
-					list = list + r + c + (r - 1) + (c - 1) + "E";// double pawn
-																  // move
+					list = list + r + c + (r - 1) + (c - 1) + "E";
 				}
 				chessBoard.set(r - 1, c - 1, " ");
 				chessBoard.set(r, c, "P");
@@ -336,9 +356,21 @@ public class AlphaBetaChess {
 			}
 		} catch (Exception e) {
 		}
-		// enpassant
-		// E is left enpassant
-		// N is right enpassant
+		try {// left en passant simple: not really: trial
+			if ("p".equals(chessBoard.get(r, c + 1))
+					&& pawnTwoUp(opponentMoves.get(opponentMoves.size() - 1))) {
+				chessBoard.set(r - 1, c + 1, "P");
+				chessBoard.set(r, c, " ");
+				chessBoard.set(r, c + 1, " ");
+				if (kingSafe()) {
+					list = list + r + c + (r - 1) + (c + 1) + "N";
+				}
+				chessBoard.set(r - 1, c + 1, " ");
+				chessBoard.set(r, c, "P");
+				chessBoard.set(r, c + 1, "p");
+			}
+		} catch (Exception e) {
+		}
 		return list;
 	}
 
