@@ -321,7 +321,8 @@ public class AlphaBetaChess {
 		} catch (Exception e) {
 		}
 		try {// left en passant simple: not really: trial
-			if ("p".equals(chessBoard.get(r, c - 1))) {// Add history 2 moves
+			if ("p".equals(chessBoard.get(r, c - 1))
+					&& pawnTwoUp(opponentMoves.get(opponentMoves.size() - 1))) {
 				chessBoard.set(r - 1, c - 1, "P");
 				chessBoard.set(r, c, " ");
 				chessBoard.set(r, c - 1, " ");
@@ -339,6 +340,16 @@ public class AlphaBetaChess {
 		// E is left enpassant
 		// N is right enpassant
 		return list;
+	}
+
+	private static boolean pawnTwoUp(String move) {
+		if ((move.charAt(1) == (move.charAt(3)))
+				&& (Character.getNumericValue(move.charAt(2))
+						- Character.getNumericValue(move.charAt(0)) == 2)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public static String posibleR(int i) {

@@ -101,10 +101,10 @@ public class UserInterface extends JPanel implements MouseListener,
 			return;
 		}
 		if (userPosibilities.contains(userMove)) {// if valid move
-			// AlphaBetaChess.humanMoves.add(dragMove);
+			AlphaBetaChess.humanMoves.add(userMove);
 			AlphaBetaChess.makeMove(userMove);
 			postMove(userMove);
-			// AlphaBetaChess.opponentMoves = AlphaBetaChess.humanMoves;
+			AlphaBetaChess.opponentMoves = AlphaBetaChess.humanMoves;
 
 			String computerPossibilities = AlphaBetaChess.posibleMoves();
 			checkEnd(computerPossibilities);
@@ -113,10 +113,10 @@ public class UserInterface extends JPanel implements MouseListener,
 					AlphaBetaChess.globalDepth, 1000000, -1000000, "", 0)
 					.substring(0, 5);
 			System.out.println("computerMove " + computerMove);
-			// AlphaBetaChess.computerMoves.add(computerMove);
+			AlphaBetaChess.computerMoves.add(computerMove);
 			AlphaBetaChess.makeMove(computerMove);
 			postMove(computerMove);
-			// AlphaBetaChess.opponentMoves = AlphaBetaChess.computerMoves;
+			AlphaBetaChess.opponentMoves = AlphaBetaChess.computerMoves;
 			repaint();
 		} else {
 			System.out.println(userMove + " is not allowed");
