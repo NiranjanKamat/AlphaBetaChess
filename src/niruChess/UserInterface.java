@@ -20,7 +20,6 @@ public class UserInterface extends JPanel implements MouseListener,
 	static int oldColumn, oldRow;
 	static int newColumn, newRow;
 	static int squareSize = 60;
-	static boolean humanAsWhite = true;
 	static boolean mouseClicked = false;
 
 	static long lastClickTime = System.currentTimeMillis();
@@ -39,7 +38,7 @@ public class UserInterface extends JPanel implements MouseListener,
 		Color white = new Color(255, 200, 100);
 		Color black = new Color(150, 50, 30);
 		Color currentColor = null;
-		if (UserInterface.humanAsWhite) {
+		if (AlphaBetaChess.humanAsWhite == 1) {
 			currentColor = black;
 		} else {
 			currentColor = white;
@@ -173,6 +172,7 @@ public class UserInterface extends JPanel implements MouseListener,
 				JOptionPane.showMessageDialog(null, "Checkmate");
 				System.out.println("Checkmate");
 			}
+			AlphaBetaChess.writeMovesToFile();
 			System.exit(0);
 			return true;
 		} else {
@@ -319,7 +319,7 @@ public class UserInterface extends JPanel implements MouseListener,
 					k = 1;
 					break;
 			}
-			if (!humanAsWhite) {
+			if (AlphaBetaChess.humanAsWhite == 0) {
 				k = 1 - k;// switch black white graphics
 			}
 			if (j != -1 && k != -1) {

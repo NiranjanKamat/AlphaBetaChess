@@ -1,7 +1,14 @@
 package niruChess;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -9,8 +16,8 @@ import javax.swing.JOptionPane;
 
 public class AlphaBetaChess {
 
-	// static ChessBoard chessBoard = ChessBoard.onlyKingComputerBoard();
-	static ChessBoard chessBoard = new ChessBoard();
+	static ChessBoard chessBoard = ChessBoard.onlyKingComputerBoard();
+	// static ChessBoard chessBoard = new ChessBoard();
 
 	static int humanAsWhite = -1;// 1=human as white, 0=human as black
 	static int globalDepth = 2;
@@ -32,6 +39,7 @@ public class AlphaBetaChess {
 	}
 
 	public static void main(String[] args) {
+
 		/*
 		 * PIECE=WHITE/black pawn=P/p kinght (horse)=K/k bishop=B/b rook
 		 * (castle)=R/r Queen=Q/q King=A/a
@@ -40,36 +48,68 @@ public class AlphaBetaChess {
 		 * b (a space represents no capture))
 		 */
 		humanAsWhite = 1;
-		JFrame f = new JFrame("Chess Tutorial");
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		JFrame frame = new JFrame("Chess Tutorial");
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent event) {
+				writeMovesToFile();
+			}
+
+		});
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		UserInterface ui = new UserInterface();
-		f.add(ui);
-		f.setSize(600, 600);
-		f.setVisible(true);
+		frame.add(ui);
+		frame.setSize(600, 600);
+		frame.setVisible(true);
 
 		Object[] option = { "Computer", "Human" };
 		humanAsWhite = JOptionPane.showOptionDialog(null,
 				"Who should play as white?", "", JOptionPane.YES_NO_OPTION,
 				JOptionPane.QUESTION_MESSAGE, null, option, option[1]);
 		if (humanAsWhite == 0) {
-			UserInterface.humanAsWhite = false;
 			long startTime = System.currentTimeMillis();
 			String computerMove = alphaBeta(globalDepth, 1000000, -1000000, "",
 					0);
 			makeMove(computerMove);
+
 			// computerMoves.add(computerMove);
 			long endTime = System.currentTimeMillis();
 			System.out.println("That took " + (endTime - startTime)
 					+ " milliseconds");
 			flipBoard();
-			f.repaint();
-
+			frame.repaint();
 		}
-		// // makeMove("7655 ");
-		// // undoMove("7655 ");
-		// for (int i = 0; i < 8; i++) {
-		// System.out.println(Arrays.toString(chessBoard[i]));
-		// }
+	}
+
+	static void writeMovesToFile() {
+		PrintWriter moveWriter = null;
+		try {
+			moveWriter = new PrintWriter(
+					"games/" + getCurrentTime() + ".moves", "UTF-8");
+		} catch (FileNotFoundException | UnsupportedEncodingException exception) {
+			exception.printStackTrace();
+		}
+		List<String> firstPlayerMoves = null;
+		List<String> secondPlayerMoves = null;
+		if (humanAsWhite == 1) {
+			firstPlayerMoves = humanMoves;
+			secondPlayerMoves = computerMoves;
+		} else {
+			firstPlayerMoves = computerMoves;
+			secondPlayerMoves = humanMoves;
+		}
+		for (int i = 0; i < firstPlayerMoves.size(); i++) {
+			moveWriter.print((i + 1) + " " + firstPlayerMoves.get(i) + " ");
+			if (i <= secondPlayerMoves.size() - 1) {
+				moveWriter.print(secondPlayerMoves.get(i));
+			}
+			moveWriter.println();
+		}
+		moveWriter.close();
+	}
+
+	private static String getCurrentTime() {
+		return new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
+				.getInstance().getTime());
 	}
 
 	public static void printBoard(String[][] chessBoard) {
@@ -796,5 +836,9 @@ public class AlphaBetaChess {
 			}
 		}
 		return true;
+	}
+
+	public enum Player {
+		HOOMAN, AI
 	}
 }
