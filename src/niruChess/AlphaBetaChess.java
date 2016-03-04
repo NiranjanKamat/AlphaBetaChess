@@ -47,7 +47,29 @@ public class AlphaBetaChess {
 		 * (1234b represents row1,column2 moves to row3, column4 which captured
 		 * b (a space represents no capture))
 		 */
-		// humanAsWhite = 1;
+
+		JFrame frame = createFrame();
+
+		Object[] option = { "Computer", "Human" };
+		humanAsWhite = JOptionPane.showOptionDialog(null,
+				"Who should play as white?", "", JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE, null, option, option[1]) == 0 ? false
+				: true;
+		if (!humanAsWhite) {
+			long startTime = System.currentTimeMillis();
+			String computerMove = alphaBeta(globalDepth, 1000000, -1000000, "",
+					0);
+			makeMove(computerMove);
+
+			long endTime = System.currentTimeMillis();
+			System.out.println("That took " + (endTime - startTime)
+					+ " milliseconds");
+			flipBoard();
+			frame.repaint();
+		}
+	}
+
+	static JFrame createFrame() {
 		JFrame frame = new JFrame("Chess Tutorial");
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent event) {
@@ -61,25 +83,7 @@ public class AlphaBetaChess {
 		frame.add(ui);
 		frame.setSize(600, 600);
 		frame.setVisible(true);
-
-		Object[] option = { "Computer", "Human" };
-		humanAsWhite = JOptionPane.showOptionDialog(null,
-				"Who should play as white?", "", JOptionPane.YES_NO_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, option, option[1]) == 0 ? false
-				: true;
-		if (!humanAsWhite) {
-			long startTime = System.currentTimeMillis();
-			String computerMove = alphaBeta(globalDepth, 1000000, -1000000, "",
-					0);
-			makeMove(computerMove);
-
-			// computerMoves.add(computerMove);
-			long endTime = System.currentTimeMillis();
-			System.out.println("That took " + (endTime - startTime)
-					+ " milliseconds");
-			flipBoard();
-			frame.repaint();
-		}
+		return frame;
 	}
 
 	static void writeMovesToFile() {
