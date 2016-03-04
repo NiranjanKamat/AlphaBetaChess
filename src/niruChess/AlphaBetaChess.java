@@ -16,8 +16,8 @@ import javax.swing.JOptionPane;
 
 public class AlphaBetaChess {
 
-	static ChessBoard chessBoard = ChessBoard.onlyKingComputerBoard();
-	// static ChessBoard chessBoard = new ChessBoard();
+	// static ChessBoard chessBoard = ChessBoard.onlyKingComputerBoard();
+	static ChessBoard chessBoard = new ChessBoard();
 
 	static int humanAsWhite = -1;// 1=human as white, 0=human as black
 	static int globalDepth = 2;
@@ -55,6 +55,7 @@ public class AlphaBetaChess {
 			}
 
 		});
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		UserInterface ui = new UserInterface();
 		frame.add(ui);
@@ -836,9 +837,5 @@ public class AlphaBetaChess {
 			}
 		}
 		return true;
-	}
-
-	public enum Player {
-		HOOMAN, AI
 	}
 }
