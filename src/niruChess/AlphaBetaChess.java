@@ -49,24 +49,21 @@ public class AlphaBetaChess {
 		 */
 
 		JFrame frame = createFrame();
-
-		Object[] option = { "Computer", "Human" };
+		Object[] whiteOptions = { "Computer", "Human" };
 		humanAsWhite = JOptionPane.showOptionDialog(null,
 				"Who should play as white?", "", JOptionPane.YES_NO_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, option, option[1]) == 0 ? false
-				: true;
+				JOptionPane.QUESTION_MESSAGE, null, whiteOptions,
+				whiteOptions[1]) == 0 ? false : true;
 		if (!humanAsWhite) {
-			long startTime = System.currentTimeMillis();
-			String computerMove = alphaBeta(globalDepth, 1000000, -1000000, "",
-					0);
-			makeMove(computerMove);
-
-			long endTime = System.currentTimeMillis();
-			System.out.println("That took " + (endTime - startTime)
-					+ " milliseconds");
-			flipBoard();
-			frame.repaint();
+			makeFirstComputerMove(frame);
 		}
+	}
+
+	static void makeFirstComputerMove(JFrame frame) {
+		String computerMove = alphaBeta(globalDepth, 1000000, -1000000, "", 0);
+		makeMove(computerMove);
+		flipBoard();
+		frame.repaint();
 	}
 
 	static JFrame createFrame() {
@@ -77,7 +74,6 @@ public class AlphaBetaChess {
 			}
 
 		});
-
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		UserInterface ui = new UserInterface();
 		frame.add(ui);
@@ -214,29 +210,25 @@ public class AlphaBetaChess {
 			castleLeft();
 		} else if (move.charAt(4) == 'P') {
 			// if pawn promotion
-			chessBoard.set(1, Character.getNumericValue(move.charAt(0)), " ");
-			chessBoard.set(0, Character.getNumericValue(move.charAt(1)),
-					String.valueOf(move.charAt(3)));
+			chessBoard.set(1, move.charAt(0), " ");
+			chessBoard.set(0, move.charAt(1), String.valueOf(move.charAt(3)));
 		} else {
-			chessBoard.set(Character.getNumericValue(move.charAt(2)), Character
-					.getNumericValue(move.charAt(3)), chessBoard.get(
-					Character.getNumericValue(move.charAt(0)),
-					Character.getNumericValue(move.charAt(1))));
-			chessBoard.set(Character.getNumericValue(move.charAt(0)),
-					Character.getNumericValue(move.charAt(1)), " ");
+			chessBoard.set(move.charAt(2), move.charAt(3),
+					chessBoard.get(move.charAt(0), move.charAt(1)));
+			chessBoard.set(move.charAt(0), move.charAt(1), " ");
 		}
 	}
 
 	static void enPassantRight(String move) {
 		chessBoard.set(move.charAt(0), move.charAt(1), " ");
-		chessBoard.set(Character.getNumericValue(move.charAt(0)),
+		chessBoard.set(move.charAt(0),
 				Character.getNumericValue(move.charAt(1)) + 1, " ");
 		chessBoard.set(move.charAt(2), move.charAt(3), "P");
 	}
 
 	static void enPassantLeft(String move) {
 		chessBoard.set(move.charAt(0), move.charAt(1), " ");
-		chessBoard.set(Character.getNumericValue(move.charAt(0)),
+		chessBoard.set(move.charAt(0),
 				Character.getNumericValue(move.charAt(1)) - 1, " ");
 		chessBoard.set(move.charAt(2), move.charAt(3), "P");
 	}
@@ -252,30 +244,26 @@ public class AlphaBetaChess {
 			uncastleLeft();
 		} else if (move.charAt(4) == 'P') {
 			// if pawn promotion
-			chessBoard.set(1, Character.getNumericValue(move.charAt(0)), "P");
-			chessBoard.set(0, Character.getNumericValue(move.charAt(1)),
-					String.valueOf(move.charAt(2)));
+			chessBoard.set(1, move.charAt(0), "P");
+			chessBoard.set(0, move.charAt(1), String.valueOf(move.charAt(2)));
 		} else {
-			chessBoard.set(Character.getNumericValue(move.charAt(0)), Character
-					.getNumericValue(move.charAt(1)), chessBoard.get(
-					Character.getNumericValue(move.charAt(2)),
-					Character.getNumericValue(move.charAt(3))));
-			chessBoard.set(Character.getNumericValue(move.charAt(2)),
-					Character.getNumericValue(move.charAt(3)),
+			chessBoard.set(move.charAt(0), move.charAt(1),
+					chessBoard.get(move.charAt(2), move.charAt(3)));
+			chessBoard.set(move.charAt(2), move.charAt(3),
 					String.valueOf(move.charAt(4)));
 		}
 	}
 
 	static void unEnpassantRight(String move) {
 		chessBoard.set(move.charAt(0), move.charAt(1), "P");
-		chessBoard.set(Character.getNumericValue(move.charAt(0)),
+		chessBoard.set(move.charAt(0),
 				Character.getNumericValue(move.charAt(1)) + 1, "p");
 		chessBoard.set(move.charAt(2), move.charAt(3), " ");
 	}
 
 	static void unEnpassantLeft(String move) {
 		chessBoard.set(move.charAt(0), move.charAt(1), "P");
-		chessBoard.set(Character.getNumericValue(move.charAt(0)),
+		chessBoard.set(move.charAt(0),
 				Character.getNumericValue(move.charAt(1)) - 1, "p");
 		chessBoard.set(move.charAt(2), move.charAt(3), " ");
 	}

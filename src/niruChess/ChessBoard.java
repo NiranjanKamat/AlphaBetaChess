@@ -62,6 +62,14 @@ public class ChessBoard {
 		chessBoard[row][column] = piece;
 	}
 
+	public void set(int row, char column, String piece) {
+		set(row, Character.getNumericValue(column), piece);
+	}
+
+	public void set(char row, int column, String piece) {
+		set(Character.getNumericValue(row), column, piece);
+	}
+
 	public void set(char row, char column, String piece) {
 		set(Character.getNumericValue(row), Character.getNumericValue(column),
 				piece);
