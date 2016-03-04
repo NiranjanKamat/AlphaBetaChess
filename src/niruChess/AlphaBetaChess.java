@@ -19,7 +19,7 @@ public class AlphaBetaChess {
 	// static ChessBoard chessBoard = ChessBoard.onlyKingComputerBoard();
 	static ChessBoard chessBoard = new ChessBoard();
 
-	static int humanAsWhite = -1;// 1=human as white, 0=human as black
+	static boolean humanAsWhite = true;// 1=human as white, 0=human as black
 	static int globalDepth = 2;
 	static boolean kingCMoved = false, kingLMoved = false;
 	static boolean rook56Moved = false, rook7Moved = false;
@@ -47,7 +47,7 @@ public class AlphaBetaChess {
 		 * (1234b represents row1,column2 moves to row3, column4 which captured
 		 * b (a space represents no capture))
 		 */
-		humanAsWhite = 1;
+		// humanAsWhite = 1;
 		JFrame frame = new JFrame("Chess Tutorial");
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent event) {
@@ -65,8 +65,9 @@ public class AlphaBetaChess {
 		Object[] option = { "Computer", "Human" };
 		humanAsWhite = JOptionPane.showOptionDialog(null,
 				"Who should play as white?", "", JOptionPane.YES_NO_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, option, option[1]);
-		if (humanAsWhite == 0) {
+				JOptionPane.QUESTION_MESSAGE, null, option, option[1]) == 0 ? false
+				: true;
+		if (!humanAsWhite) {
 			long startTime = System.currentTimeMillis();
 			String computerMove = alphaBeta(globalDepth, 1000000, -1000000, "",
 					0);
@@ -91,7 +92,7 @@ public class AlphaBetaChess {
 		}
 		List<String> firstPlayerMoves = null;
 		List<String> secondPlayerMoves = null;
-		if (humanAsWhite == 1) {
+		if (humanAsWhite) {
 			firstPlayerMoves = humanMoves;
 			secondPlayerMoves = computerMoves;
 		} else {

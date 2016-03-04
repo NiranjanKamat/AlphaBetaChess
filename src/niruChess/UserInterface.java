@@ -38,7 +38,7 @@ public class UserInterface extends JPanel implements MouseListener,
 		Color white = new Color(255, 200, 100);
 		Color black = new Color(150, 50, 30);
 		Color currentColor = null;
-		if (AlphaBetaChess.humanAsWhite == 1) {
+		if (AlphaBetaChess.humanAsWhite) {
 			currentColor = black;
 		} else {
 			currentColor = white;
@@ -319,7 +319,7 @@ public class UserInterface extends JPanel implements MouseListener,
 					k = 1;
 					break;
 			}
-			if (AlphaBetaChess.humanAsWhite == 0) {
+			if (!AlphaBetaChess.humanAsWhite) {
 				k = 1 - k;// switch black white graphics
 			}
 			if (j != -1 && k != -1) {
